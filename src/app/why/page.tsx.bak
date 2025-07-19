@@ -1,0 +1,18 @@
+'use client';
+
+import { AccessibilityProvider } from './AccessibilityProvider';
+import { AccessibilityEnhancements } from './AccessibilityEnhancements';
+import WhyPageContent from './WhyPageContent';
+
+/**
+ * Main entry point for the Why page
+ * This component wraps the page content with accessibility providers
+ */
+export default function WhyPage() {
+  return (
+    <AccessibilityProvider>
+      <AccessibilityEnhancements />
+      <WhyPageContent />
+    </AccessibilityProvider>
+  );
+}

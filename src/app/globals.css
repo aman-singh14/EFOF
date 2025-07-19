@@ -1,0 +1,189 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root, .dark {
+    /* Strictly black and white palette */
+    --background: 0 0% 100%;       /* White */
+    --foreground: 0 0% 0%;         /* Black */
+
+    /* Card colors */
+    --card: 0 0% 100%;             /* White */
+    --card-foreground: 0 0% 0%;    /* Black */
+
+    /* Popover colors */
+    --popover: 0 0% 100%;          /* White */
+    --popover-foreground: 0 0% 0%; /* Black */
+
+    /* Primary colors */
+    --primary: 0 0% 0%;            /* Black */
+    --primary-foreground: 0 0% 100%; /* White */
+
+    /* Secondary colors */
+    --secondary: 0 0% 100%;        /* White */
+    --secondary-foreground: 0 0% 0%; /* Black */
+
+    /* Muted colors */
+    --muted: 0 0% 100%;            /* White */
+    --muted-foreground: 0 0% 0%;   /* Black */
+
+    /* Accent colors */
+    --accent: 0 0% 0%;             /* Black */
+    --accent-foreground: 0 0% 100%; /* White */
+
+    /* Destructive colors */
+    --destructive: 0 100% 50%;     /* Red for errors (unchanged for error visibility) */
+    --destructive-foreground: 0 0% 100%; /* White */
+
+    /* UI element colors */
+    --border: 0 0% 0%;             /* Black */
+    --input: 0 0% 0%;              /* Black */
+    --ring: 0 0% 0%;               /* Black */
+
+    /* Chart colors */
+    --chart-1: 0 0% 0%;            /* Black */
+    --chart-2: 0 0% 100%;          /* White */
+    --chart-3: 0 0% 0%;            /* Black */
+    --chart-4: 0 0% 100%;          /* White */
+    --chart-5: 0 0% 0%;            /* Black */
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: Georgia, "Times New Roman", Times, serif;
+    line-height: 1.6;
+    font-weight: 400;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: Georgia, "Times New Roman", Times, serif;
+    line-height: 1.2;
+    font-weight: 600;
+  }
+
+  h1 {
+    font-weight: 700;
+  }
+
+  p {
+    line-height: 1.6;
+  }
+
+
+}
+
+@font-face {
+  font-family: 'Acquire';
+  src: url('/fonts/Aquire-BW0ox.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Type Salon Plecnik';
+  src: url('/fonts/Type Salon - Plecnik Trial Display.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Glyce Regular';
+  src: url('/fonts/GlyceRegular-9M7DB.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Helonik Extended Bold';
+  src: url('/fonts/ckhans-fonts-helonik-extended-bold-demo.otf') format('opentype');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@layer utilities {
+  .clip-path-hexagon {
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  }
+  /* Only spin when parent has .reveal (ScrollReveal adds this) */
+  .hexagon-spin-once {
+    /* No animation by default */
+  }
+  .reveal .hexagon-spin-once {
+    animation: spin-once 2.2s cubic-bezier(0.22, 1, 0.36, 1) 1;
+    transform-origin: 50% 50%;
+  }
+  .font-acquire {
+    font-family: 'Acquire', sans-serif;
+  }
+  .font-plecnik {
+    font-family: 'Type Salon Plecnik', serif;
+  }
+  .font-glyce {
+    font-family: 'Glyce Regular', sans-serif;
+  }
+  .font-helonik {
+    font-family: 'Helonik Extended Bold', sans-serif;
+  }
+}
+
+@keyframes spin-once {
+  to { transform: rotate(360deg); }
+}
+.animate-spin-once {
+  animation: spin-once 2.2s cubic-bezier(0.22, 1, 0.36, 1) 1;
+  transform-origin: 50% 50%;
+}
+
+/* Professional fade-in animation for subtle effects */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-fadeInUp {
+  animation: fadeInUp 300ms ease-out;
+}
+
+/* Custom Scrollbar Styles - strictly black and white */
+::-webkit-scrollbar {
+  width: 10px;
+  background: #fff; /* white track */
+}
+::-webkit-scrollbar-thumb {
+  background: #000; /* black thumb */
+  border-radius: 8px;
+  border: 2px solid #fff;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #222; /* slightly lighter black for hover */
+}
+::-webkit-scrollbar-corner {
+  background: #fff;
+}
+
+/* Firefox */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: #000 #fff;
+}
+
+/* For scrollable containers (if needed) */
+[data-scroll-container] {
+  scrollbar-width: thin;
+  scrollbar-color: #000 #fff;
+}
