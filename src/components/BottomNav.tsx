@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Users, Users2, Newspaper, Mail, ChevronDown, ChevronUp, Info, Briefcase, Users as TeamIcon } from 'lucide-react';
+import { Home, Users, Mail, Info, Briefcase, Users as TeamIcon } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -35,12 +35,6 @@ export default function BottomNav() {
         { href: '/portfolio', label: 'Portfolio', icon: Briefcase },
         { href: '/team', label: 'Team', icon: TeamIcon },
       ]
-    },
-    { 
-      href: '/news', 
-      label: 'News', 
-      icon: Newspaper,
-      isLink: true
     },
     { 
       href: '/contact', 
@@ -138,12 +132,12 @@ export default function BottomNav() {
                         href={subItem.href || '#'}
                         className={`flex items-center justify-center p-2.5 rounded-xl transition-colors duration-200 ${
                           isActive
-                            ? 'bg-primary text-primary-foreground'
-                            : 'text-foreground hover:bg-secondary'
+                            ? 'bg-black text-white'
+                            : 'text-black hover:bg-gray-100'
                         }`}
                         onClick={() => setIsAboutOpen(false)}
                       >
-                        <Icon className={`w-4 h-4 ${isActive ? 'text-primary-foreground' : 'text-primary'}`} />
+                        <Icon className={`w-4 h-4 ${isActive ? 'text-white' : 'text-black'}`} />
                         <span className="ml-3 text-sm font-medium">{subItem.label}</span>
                       </Link>
                     </motion.div>
@@ -178,17 +172,17 @@ export default function BottomNav() {
                     onClick={() => setIsAboutOpen(!isAboutOpen)}
                     className={`flex items-center justify-center p-3 rounded-full transition-colors duration-200 ${
                       isActive || isAboutOpen
-                        ? 'text-primary-foreground bg-primary'
-                        : 'text-foreground hover:bg-secondary'
+                        ? 'text-white bg-black'
+                        : 'text-black hover:bg-gray-100'
                     }`}
                     aria-haspopup="true"
                     aria-expanded={isAboutOpen}
                     title={item.label}
                   >
-                    <Icon className={`w-5 h-5 ${isActive || isAboutOpen ? 'text-primary-foreground' : 'text-primary'}`} />
+                    <Icon className={`w-5 h-5 ${isActive || isAboutOpen ? 'text-white' : 'text-black'}`} />
                     {isAboutOpen && (
                       <motion.span 
-                        className="ml-2 text-sm font-medium text-primary whitespace-nowrap"
+                        className="ml-2 text-sm font-medium text-white whitespace-nowrap"
                         initial={{ opacity: 0, x: -10 }}
                         animate={{ opacity: 1, x: 0 }}
                         exit={{ opacity: 0, x: -10 }}
@@ -207,14 +201,14 @@ export default function BottomNav() {
                   href={item.href || '#'}
                   className={`flex items-center justify-center p-3 rounded-full transition-colors duration-200 ${
                     isActive
-                      ? 'text-primary-foreground bg-primary' 
-                      : 'text-foreground hover:bg-secondary'
+                      ? 'text-white bg-black' 
+                      : 'text-black hover:bg-gray-100'
                   }`}
                   aria-current={isActive ? 'page' : undefined}
                   aria-label={item.label}
                   title={item.label}
                 >
-                  <Icon className={`w-5 h-5 ${isActive ? 'text-primary-foreground' : 'text-primary'}`} />
+                  <Icon className={`w-5 h-5 ${isActive ? 'text-white' : 'text-black'}`} />
                 </Link>
               </div>
             );

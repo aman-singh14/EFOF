@@ -117,15 +117,52 @@ const WhyPageContent = () => {
   return (
     <PageWrapper>
       <div className="relative">
-        {/* Fixed Navigation */}
-        <div className="fixed top-8 left-8 z-50 hidden md:block">
+        {/* Fixed Navigation - Dynamic logo based on current section */}
+        <div className="fixed top-6 left-6 z-50 hidden md:block">
           <Link href="/" aria-label="Home">
-            <Image src="/EFOF Logo.png" alt="Education for Our Future Logo" width={120} height={40} className="h-10 w-auto opacity-90 hover:opacity-100 transition-opacity duration-200" />
+            <Image 
+              src={
+                // Determine which logo to use based on section background
+                // Hero (0) - white bg - black logo
+                // Questions (1,2,3) - alternating bg - alternating logo
+                // Context (4) - white bg - black logo
+                // Statistics (5,6,7,8) - alternating bg - alternating logo
+                // Vision (9) - black bg - white logo
+                // Action (10) - white bg - black logo
+                currentSection === 0 || 
+                currentSection === 2 || 
+                currentSection === 4 || 
+                currentSection === 6 || 
+                currentSection === 8 || 
+                currentSection === 10 
+                  ? "/EFOF Logo.png" 
+                  : "/EFOF Logo 2.png"
+              } 
+              alt="Education for Our Future Logo" 
+              width={180} 
+              height={60} 
+              className="h-16 w-auto hover:opacity-90 transition-opacity duration-200" 
+            />
           </Link>
         </div>
-        <div className="fixed top-6 left-6 z-50 block md:hidden">
+        <div className="sticky top-0 left-0 z-50 block md:hidden bg-transparent pt-4 pl-4">
           <Link href="/" aria-label="Home">
-            <Image src="/EFOF Logo.png" alt="Education for Our Future Logo" width={100} height={32} className="h-8 w-auto opacity-90 hover:opacity-100 transition-opacity duration-200" />
+            <Image 
+              src={
+                currentSection === 0 || 
+                currentSection === 2 || 
+                currentSection === 4 || 
+                currentSection === 6 || 
+                currentSection === 8 || 
+                currentSection === 10 
+                  ? "/EFOF Logo.png" 
+                  : "/EFOF Logo 2.png"
+              } 
+              alt="Education for Our Future Logo" 
+              width={140} 
+              height={48} 
+              className="h-14 w-auto hover:opacity-90 transition-opacity duration-200" 
+            />
           </Link>
         </div>
 

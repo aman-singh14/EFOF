@@ -44,14 +44,14 @@ export default function NewsPage() {
                     category: "Funding"
                   },
                   {
-                    date: "May 28, 2025", 
+                    date: "May 28, 2025",
                     title: "How Student-Led Design is Shaping the Future of Education",
                     excerpt: "Education for the Future's unique approach puts students at the center of educational innovation.",
                     category: "Innovation"
                   },
                   {
                     date: "May 10, 2025",
-                    title: "Bridging the Gap Between Technology and Classroom Learning", 
+                    title: "Bridging the Gap Between Technology and Classroom Learning",
                     excerpt: "Education for the Future's platform is making waves in the edtech industry with its student-centered approach.",
                     category: "Technology"
                   }
@@ -85,7 +85,7 @@ export default function NewsPage() {
                   </div>
                 ))}
               </div>
-              
+
               <div className="text-center mt-16">
                 <button className="px-8 py-3 bg-primary text-primary-foreground font-medium rounded-lg hover:bg-accent transition-colors duration-200 shadow-sm">
                   View All News

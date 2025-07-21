@@ -22,7 +22,6 @@ const MainNav = () => {
         { href: '/team', label: 'Team' },
       ]
     },
-    { href: '/news', label: 'News' },
     { href: '/contact', label: 'Contact' },
   ];
 
@@ -72,8 +71,8 @@ const MainNav = () => {
                       onClick={() => setIsAboutOpen(!isAboutOpen)}
                       className={`flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors duration-200 ${
                         isAboutSection 
-                          ? 'text-primary font-semibold' 
-                          : 'text-black hover:text-primary'
+                          ? 'text-black font-semibold' 
+                          : 'text-black hover:text-gray-600'
                       }`}
                       aria-haspopup="true"
                       aria-expanded={isAboutOpen}
@@ -106,8 +105,8 @@ const MainNav = () => {
                               href={subItem.href}
                               className={`block px-4 py-2 text-sm transition-colors duration-200 ${
                                 pathname === subItem.href
-                                  ? 'bg-secondary text-primary font-medium'
-                                  : 'text-black hover:bg-secondary/50'
+                                  ? 'bg-gray-100 text-black font-medium'
+                                  : 'text-black hover:bg-gray-50'
                               }`}
                               onClick={() => setIsAboutOpen(false)}
                             >
@@ -127,8 +126,8 @@ const MainNav = () => {
                   href={item.href}
                   className={`px-3 py-2 text-sm font-medium rounded-md transition-colors duration-200 ${
                     pathname === item.href
-                      ? 'text-primary font-semibold'
-                      : 'text-black hover:text-primary'
+                      ? 'text-black font-semibold'
+                      : 'text-black hover:text-gray-600'
                   }`}
                 >
                   {item.label}

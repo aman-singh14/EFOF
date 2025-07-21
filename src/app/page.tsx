@@ -2,11 +2,19 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState, ReactNode } from "react";
+import { useEffect, useState } from "react";
 import PageWrapper from "@/components/page-wrapper";
 import ScrollAnimation from "@/components/ScrollAnimation";
 import { useRef } from "react";
 import Footer from "@/components/Footer";
+import { 
+  MorphingTextReveal, 
+  CircleMaskReveal, 
+  FloatingParticles, 
+  MorphingShape, 
+  StaggeredTextReveal,
+  AnimatedLine 
+} from "@/components/EnhancedAnimations";
 
 
 
@@ -167,12 +175,13 @@ export default function Home() {
   const [pageLoaded, setPageLoaded] = useState(false);
   const [currentSection, setCurrentSection] = useState(0);
   const [isScrolling, setIsScrolling] = useState(false);
+  const [bounceStates, setBounceStates] = useState([false, false]);
   const blueprintRef = useRef<HTMLDivElement>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const sectionsRef = useRef<HTMLElement[]>([]);
 
   // Total number of sections
-  const totalSections = 7; // Hero, Blueprint, Why, Triangle, Testimonials, Portfolio, Team, Footer
+  const totalSections = 6; // Hero, Blueprint, Why, Triangle, Testimonials, Team (with integrated footer)
 
   // Ensure component is mounted and add initial fade-in
   useEffect(() => {
@@ -238,6 +247,31 @@ export default function Home() {
     };
   }, [currentSection, isScrolling, isMounted, totalSections]);
 
+  // Handle sequential bounce animation for team section
+  useEffect(() => {
+    if (currentSection === 5) {
+      // Reset bounce states first
+      setBounceStates([false, false]);
+      
+      // Start first bounce immediately
+      setTimeout(() => {
+        setBounceStates([true, false]);
+      }, 800); // Delay to let section load
+      
+      // Start second bounce after first one completes
+      setTimeout(() => {
+        setBounceStates([false, true]);
+      }, 1600); // 800ms delay + 800ms for first bounce to complete
+      
+      // Reset both after animations complete
+      setTimeout(() => {
+        setBounceStates([false, false]);
+      }, 3200);
+    } else {
+      setBounceStates([false, false]);
+    }
+  }, [currentSection]);
+
   // Handle scroll events for animations and current section tracking
   useEffect(() => {
     if (!isMounted || !scrollContainerRef.current) return;
@@ -277,15 +311,27 @@ export default function Home() {
   return (
     <PageWrapper>
       <div className="relative">
-        {/* Fixed Navigation */}
-        <div className="fixed top-8 left-8 z-50 hidden md:block">
+        {/* Fixed Navigation - Dynamic logo based on current section */}
+        <div className="fixed top-6 left-6 z-50 hidden md:block">
           <Link href="/" aria-label="Home">
-            <Image src="/EFOF Logo.png" alt="Education for Our Future Logo" width={120} height={40} className="h-10 w-auto opacity-90 hover:opacity-100 transition-opacity duration-200" />
+            <Image 
+              src={currentSection === 1 || currentSection === 3 ? "/EFOF Logo.png" : "/EFOF Logo 2.png"} 
+              alt="Education for Our Future Logo" 
+              width={180} 
+              height={60} 
+              className="h-16 w-auto hover:opacity-90 transition-opacity duration-200" 
+            />
           </Link>
         </div>
-        <div className="fixed top-6 left-6 z-50 block md:hidden">
+        <div className="sticky top-0 left-0 z-50 block md:hidden bg-transparent pt-4 pl-4">
           <Link href="/" aria-label="Home">
-            <Image src="/EFOF Logo.png" alt="Education for Our Future Logo" width={100} height={32} className="h-8 w-auto opacity-90 hover:opacity-100 transition-opacity duration-200" />
+            <Image 
+              src={currentSection === 1 || currentSection === 3 ? "/EFOF Logo.png" : "/EFOF Logo 2.png"} 
+              alt="Education for Our Future Logo" 
+              width={140} 
+              height={48} 
+              className="h-14 w-auto hover:opacity-90 transition-opacity duration-200" 
+            />
           </Link>
         </div>
 
@@ -318,7 +364,7 @@ export default function Home() {
                   <h1 className="text-4xl md:text-6xl lg:text-8xl font-bold text-white leading-[0.9] tracking-tight max-w-4xl">
                     EDUCATION<br />
                     FOR OUR<br />
-                    <span className="text-white/80">FUTURE</span>
+                    <span className="text-white/80">FUTURES</span>
                   </h1>
                 </ScrollAnimation>
               </div>
@@ -422,123 +468,11 @@ export default function Home() {
             <MinimalisticTriangleSection scrollContainer={scrollContainerRef.current} />
           </section>
 
-          {/* Testimonials Section - Minimalistic full-screen layout */}
-          <section className="relative h-screen snap-start bg-black text-white overflow-hidden">
-            <video
-              autoPlay
-              muted
-              loop
-              playsInline
-              className="absolute inset-0 w-full h-full object-cover"
-            >
-              <source src="/videos/connections video.mp4" type="video/mp4" />
-            </video>
-            <div className="absolute inset-0 bg-black/60 z-5" />
-            <div className="relative z-10 h-screen flex flex-col justify-between p-8 md:p-16">
-              {/* Top left - Section title */}
-              <div className="flex items-start justify-start pt-16">
-                <ScrollAnimation direction="up" delay={0.2} once={false}>
-                  <h2 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white leading-[0.9] tracking-tight">
-                    What Our<br />
-                    <span className="text-white/70">Partners</span><br />
-                    Say
-                  </h2>
-                </ScrollAnimation>
-              </div>
 
-              {/* Center - Quote */}
-              <div className="flex-1 flex items-center justify-center">
-                <ScrollAnimation direction="up" delay={0.6} once={false}>
-                  <div className="max-w-4xl text-center">
-                    <blockquote className="text-2xl md:text-3xl lg:text-4xl text-white leading-relaxed font-light mb-12">
-                      "Owl Ventures' expertise in the edtech market has been a tremendous asset, allowing us to scale our impact and create high-quality STEM learning experiences for more than eight million students."
-                    </blockquote>
-                  </div>
-                </ScrollAnimation>
-              </div>
-
-              {/* Bottom right - Attribution */}
-              <div className="flex justify-end items-end">
-                <ScrollAnimation direction="left" delay={1.0} once={false}>
-                  <div className="text-right">
-                    <div className="w-24 h-0.5 bg-white ml-auto mb-4"></div>
-                    <p className="text-xl md:text-2xl font-bold text-white mb-2">Philip Galati</p>
-                    <p className="text-lg text-white/70">President & CEO of Accelerate Learning</p>
-                  </div>
-                </ScrollAnimation>
-              </div>
-            </div>
-          </section>
-
-          {/* Portfolio Companies Section - Minimalistic full-screen layout */}
-          <section className="relative h-screen snap-start bg-white text-black">
-            <div className="h-screen flex flex-col justify-between p-8 md:p-16 relative">
-              {/* Top left - Title */}
-              <div className="flex items-start justify-start pt-16">
-                <ScrollAnimation direction="up" delay={0.2} once={false}>
-                  <h2 className="text-4xl md:text-6xl lg:text-7xl font-bold text-black leading-[0.9] tracking-tight">
-                    Our<br />
-                    <span className="text-black/70">Portfolio</span><br />
-                    Companies
-                  </h2>
-                </ScrollAnimation>
-              </div>
-
-              {/* Center - Company logos grid */}
-              <div className="flex-1 flex items-center justify-center">
-                <ScrollAnimation direction="up" delay={0.6} once={false}>
-                  <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-8 md:gap-12 max-w-6xl">
-                    {[
-                      { src: "https://ext.same-assets.com/95251549/2765420269.svg", alt: "Amira Learning" },
-                      { src: "https://ext.same-assets.com/95251549/2750686221.svg", alt: "Class Technologies" },
-                      { src: "https://ext.same-assets.com/95251549/45746451.svg", alt: "Degreed" },
-                      { src: "https://ext.same-assets.com/95251549/3531959595.svg", alt: "Hazel Health" },
-                      { src: "https://ext.same-assets.com/95251549/4173540768.svg", alt: "Interplay Learning" },
-                      { src: "https://ext.same-assets.com/95251549/1618538892.svg", alt: "Kiddom" },
-                      { src: "https://ext.same-assets.com/95251549/2173498083.svg", alt: "Kyron Learning" },
-                      { src: "https://ext.same-assets.com/95251549/3125628685.svg", alt: "Labster" },
-                      { src: "https://ext.same-assets.com/95251549/3319807111.svg", alt: "LeapFinance" },
-                      { src: "https://ext.same-assets.com/95251549/2458318806.svg", alt: "MasterClass" },
-                      { src: "https://ext.same-assets.com/95251549/1287973997.svg", alt: "Newsela" },
-                      { src: "https://ext.same-assets.com/95251549/465069120.svg", alt: "Quizlet" },
-                    ].slice(0, 12).map((company, index) => (
-                      <div key={index} className="flex items-center justify-center opacity-60 hover:opacity-100 transition-opacity duration-200">
-                        <Image
-                          src={company.src}
-                          alt={company.alt}
-                          width={80}
-                          height={40}
-                          className="h-8 md:h-10 w-auto object-contain filter grayscale hover:grayscale-0 transition-all duration-200"
-                        />
-                      </div>
-                    ))}
-                  </div>
-                </ScrollAnimation>
-              </div>
-
-              {/* Bottom right - CTA */}
-              <div className="flex justify-end items-end">
-                <ScrollAnimation direction="left" delay={1.0} once={false}>
-                  <div className="text-right">
-                    <div className="w-24 h-0.5 bg-black ml-auto mb-4"></div>
-                    <Link
-                      href="/portfolio"
-                      className="inline-flex items-center gap-2 text-black/80 hover:text-black transition-colors duration-200 group"
-                    >
-                      <span className="text-lg">See all companies</span>
-                      <span className="inline-block transform group-hover:translate-x-1 transition-transform duration-200">
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
-                      </span>
-                    </Link>
-                  </div>
-                </ScrollAnimation>
-              </div>
-            </div>
-          </section>
-
-          {/* Team Section - Minimalistic full-screen layout */}
-          <section className="relative h-screen snap-start bg-black text-white">
-            <div className="h-screen flex flex-col justify-between p-8 md:p-16 relative">
+          {/* Team Section with Integrated Footer - No snap scroll between them */}
+          <section className="relative bg-black text-white">
+            {/* Team Content */}
+            <div className="h-screen snap-start flex flex-col justify-between p-8 md:p-16 relative">
               {/* Top left - Title */}
               <div className="flex items-start justify-start pt-16">
                 <ScrollAnimation direction="up" delay={0.2} once={false}>
@@ -549,46 +483,66 @@ export default function Home() {
                 </ScrollAnimation>
               </div>
 
-              {/* Center - Team members */}
+              {/* Center - Team members with sequential bounce animation */}
               <div className="flex-1 flex items-center justify-center">
                 <ScrollAnimation direction="up" delay={0.6} once={false}>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-12 md:gap-16 max-w-4xl">
+                  <div className="flex justify-center gap-16 md:gap-20 max-w-2xl">
                     {[
-                      { name: "Dr. Sarah Chen", role: "CEO & Co-Founder", image: "/team/sarah-chen.jpg" },
-                      { name: "James Wilson", role: "CTO & Co-Founder", image: "/team/james-wilson.jpg" },
-                      { name: "Maria Garcia", role: "Head of Product", image: "/team/maria-garcia.jpg" },
-                      { name: "David Kim", role: "Lead Developer", image: "/team/david-kim.jpg" }
+                      { name: "Rishal Melvani", role: "Founder" },
+                      { name: "Ishaan Singh", role: "Founder" }
                     ].map((member, index) => (
                       <div key={index} className="text-center group">
-                        <div className="w-20 h-20 md:w-24 md:h-24 mx-auto mb-4 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 overflow-hidden group-hover:bg-white/20 transition-all duration-200">
+                        <div 
+                          className={`w-24 h-24 md:w-28 md:h-28 mx-auto mb-6 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 overflow-hidden group-hover:bg-white/20 transition-all duration-200 ${
+                            bounceStates[index] ? 'animate-bounce' : ''
+                          }`}
+                          style={{
+                            animationDuration: bounceStates[index] ? '0.6s' : undefined,
+                            animationIterationCount: bounceStates[index] ? '3' : undefined
+                          }}
+                        >
                           <div className="w-full h-full bg-white/20 flex items-center justify-center">
-                            <div className="w-2 h-2 bg-white rounded-full"></div>
+                            <div className="w-3 h-3 bg-white rounded-full"></div>
                           </div>
                         </div>
-                        <h3 className="text-sm md:text-base font-medium text-white mb-1 leading-tight">{member.name}</h3>
-                        <p className="text-xs md:text-sm text-white/60">{member.role}</p>
+                        <h3 className="text-base md:text-lg font-medium text-white mb-2 leading-tight">{member.name}</h3>
+                        <p className="text-sm md:text-base text-white/60">{member.role}</p>
                       </div>
                     ))}
                   </div>
                 </ScrollAnimation>
               </div>
 
-              {/* Bottom right - Description */}
-              <div className="flex justify-end items-end">
-                <ScrollAnimation direction="left" delay={1.0} once={false}>
-                  <div className="max-w-md text-right">
-                    <div className="w-24 h-0.5 bg-white ml-auto mb-4"></div>
+              {/* Bottom - Description and Meet The Team Button */}
+              <div className="flex flex-col md:flex-row justify-between items-end gap-8">
+                {/* Description */}
+                <ScrollAnimation direction="right" delay={1.0} once={false}>
+                  <div className="max-w-md">
+                    <div className="w-24 h-0.5 bg-white mb-4"></div>
                     <p className="text-lg md:text-xl text-white/80 leading-relaxed">
-                      A diverse group of educators, technologists, and visionaries working together to transform education
+                      A student-led initiative building the future of education
                     </p>
                   </div>
                 </ScrollAnimation>
+
+                {/* Meet The Team Button */}
+                <ScrollAnimation direction="left" delay={1.2} once={false}>
+                  <Link
+                    href="/team"
+                    className="inline-flex items-center gap-2 text-white/80 hover:text-white transition-colors duration-200 group"
+                  >
+                    <span className="text-lg">Meet The Team</span>
+                    <span className="inline-block transform group-hover:translate-x-1 transition-transform duration-200">
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                      </svg>
+                    </span>
+                  </Link>
+                </ScrollAnimation>
               </div>
             </div>
-          </section>
 
-          {/* Footer Section */}
-          <section className="relative h-screen snap-start">
+            {/* Footer - Integrated directly below team content */}
             <Footer />
           </section>
         </div>
