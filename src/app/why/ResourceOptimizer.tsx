@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useRef, memo } from 'react';
+import { useEffect, memo } from 'react';
 
 /**
  * Component that monitors and reports Core Web Vitals metrics
@@ -14,12 +14,21 @@ export const WebVitalsMonitor = memo(function WebVitalsMonitor() {
     }
 
     // Load web-vitals library dynamically
-    import('web-vitals').then(({ getCLS, getFID, getLCP, getFCP, getTTFB }) => {
-      getCLS(sendToAnalytics);
-      getFID(sendToAnalytics);
-      getLCP(sendToAnalytics);
-      getFCP(sendToAnalytics);
-      getTTFB(sendToAnalytics);
+    import('web-vitals').then((vitals) => {
+      // Use type assertion to access the functions
+      const webVitals = vitals as unknown as {
+        getCLS: (callback: (metric: { name: string; delta: number; id: string }) => void) => void;
+        getFID: (callback: (metric: { name: string; delta: number; id: string }) => void) => void;
+        getLCP: (callback: (metric: { name: string; delta: number; id: string }) => void) => void;
+        getFCP: (callback: (metric: { name: string; delta: number; id: string }) => void) => void;
+        getTTFB: (callback: (metric: { name: string; delta: number; id: string }) => void) => void;
+      };
+
+      webVitals.getCLS(sendToAnalytics);
+      webVitals.getFID(sendToAnalytics);
+      webVitals.getLCP(sendToAnalytics);
+      webVitals.getFCP(sendToAnalytics);
+      webVitals.getTTFB(sendToAnalytics);
     });
 
     // Function to send metrics to analytics
@@ -212,7 +221,7 @@ export const ImageOptimizationProvider = memo(function ImageOptimizationProvider
     imagesWithoutDecoding.forEach(img => {
       img.setAttribute('decoding', 'async');
     });
-    
+
     // Ensure all images have alt text
     const imagesWithoutAlt = document.querySelectorAll('img:not([alt])');
     imagesWithoutAlt.forEach(img => {
@@ -222,7 +231,7 @@ export const ImageOptimizationProvider = memo(function ImageOptimizationProvider
       const altText = filename.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
       img.setAttribute('alt', altText || 'Image');
     });
-    
+
     // Add role="presentation" to decorative images
     const decorativeImages = document.querySelectorAll('.decorative-image');
     decorativeImages.forEach(img => {

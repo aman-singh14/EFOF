@@ -39,7 +39,7 @@ export function usePerformanceOptimizedAnimations() {
     // Check if window is available (client-side)
     if (typeof window !== 'undefined') {
       // Use deviceMemory API if available to detect low-end devices
-      const memoryLevel = 'deviceMemory' in navigator ? (navigator as any).deviceMemory : 8;
+      const memoryLevel = 'deviceMemory' in navigator ? (navigator as Navigator & { deviceMemory: number }).deviceMemory : 8;
       
       // Check for CPU cores if available
       const cpuCores = 'hardwareConcurrency' in navigator ? navigator.hardwareConcurrency : 8;
@@ -49,7 +49,7 @@ export function usePerformanceOptimizedAnimations() {
       
       // Check for battery status if available
       if ('getBattery' in navigator) {
-        (navigator as any).getBattery().then((battery: any) => {
+        (navigator as Navigator & { getBattery: () => Promise<{ level: number; charging: boolean }> }).getBattery().then((battery) => {
           const isLowBattery = battery.level < 0.2 && !battery.charging;
           
           // Determine performance level based on all factors
@@ -73,7 +73,7 @@ export function usePerformanceOptimizedAnimations() {
       }
       
       // Check for Data Saver mode
-      if ('connection' in navigator && (navigator as any).connection.saveData) {
+      if ('connection' in navigator && (navigator as Navigator & { connection: { saveData: boolean } }).connection.saveData) {
         setPerformanceLevel('low');
       }
     }
@@ -149,7 +149,7 @@ export const DeferredScript = memo(function DeferredScript({
       if (document.readyState === 'complete') {
         // Use requestIdleCallback if available
         if ('requestIdleCallback' in window) {
-          (window as any).requestIdleCallback(() => {
+          (window as Window & { requestIdleCallback: (callback: () => void, options?: { timeout: number }) => number }).requestIdleCallback(() => {
             setShouldRender(true);
           }, { timeout: 2000 });
         } else {
@@ -160,7 +160,7 @@ export const DeferredScript = memo(function DeferredScript({
         const handleLoad = () => {
           // Use requestIdleCallback if available
           if ('requestIdleCallback' in window) {
-            (window as any).requestIdleCallback(() => {
+            (window as Window & { requestIdleCallback: (callback: () => void, options?: { timeout: number }) => number }).requestIdleCallback(() => {
               setShouldRender(true);
             }, { timeout: 2000 });
           } else {
@@ -180,7 +180,7 @@ export const DeferredScript = memo(function DeferredScript({
 /**
  * Hook for optimizing animations with requestAnimationFrame
  */
-export function useAnimationFrame(callback: (deltaTime: number) => void, dependencies: any[] = []) {
+export function useAnimationFrame(callback: (deltaTime: number) => void, dependencies: React.DependencyList = []) {
   const requestRef = useRef<number>();
   const previousTimeRef = useRef<number>();
   const callbackRef = useRef(callback);

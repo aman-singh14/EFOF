@@ -11,7 +11,7 @@ import AnimationOrchestrator, {
 // Mock framer-motion
 vi.mock('framer-motion', () => ({
   motion: {
-    div: ({ children, ...props }: any) => <div {...props}>{children}</div>,
+    div: ({ children, ...props }: React.HTMLAttributes<HTMLDivElement> & { animate?: unknown }) => <div {...props}>{children}</div>,
   },
   useAnimation: () => ({
     start: vi.fn(),

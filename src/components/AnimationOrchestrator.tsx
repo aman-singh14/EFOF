@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
-import { motion, useAnimation, Variants, AnimationControls } from 'framer-motion';
+import { motion, useAnimation, Variants } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 
 // Animation configuration interfaces
@@ -88,7 +88,7 @@ export const EASING_PRESETS = {
 
 interface AnimatedElement {
   element: Element;
-  controls: AnimationControls;
+  controls: ReturnType<typeof useAnimation>;
   config: AnimationConfig;
   isVisible: boolean;
 }
@@ -111,17 +111,42 @@ export default function AnimationOrchestrator({
     rootMargin: '-10% 0px -10% 0px'
   });
 
+  // Create a set of pre-initialized animation controls
+  const control1 = useAnimation();
+  const control2 = useAnimation();
+  const control3 = useAnimation();
+  const control4 = useAnimation();
+  const control5 = useAnimation();
+  const control6 = useAnimation();
+  const control7 = useAnimation();
+  const control8 = useAnimation();
+  const control9 = useAnimation();
+  const control10 = useAnimation();
+  
+  // Store all controls in an array for easy access
+  const controlsArray = [
+    control1, control2, control3, control4, control5,
+    control6, control7, control8, control9, control10
+  ];
+  
+  // Track which controls are already used
+  const nextControlIndex = useRef(0);
+  
   // Initialize animated elements
   useEffect(() => {
     if (!containerRef.current || isInitialized) return;
 
     const elements: AnimatedElement[] = [];
+    nextControlIndex.current = 0;
     
     animations.forEach((config) => {
       const foundElements = containerRef.current!.querySelectorAll(config.elements);
       
       foundElements.forEach((element) => {
-        const controls = useAnimation();
+        // Get the next available control
+        const controlIndex = nextControlIndex.current % controlsArray.length;
+        const controls = controlsArray[controlIndex];
+        nextControlIndex.current += 1;
         
         // Set initial state immediately
         controls.set(config.animation.initial || {});
@@ -217,7 +242,10 @@ export default function AnimationOrchestrator({
 
   // Combine refs for intersection observer and container
   const setRefs = (element: HTMLDivElement | null) => {
-    containerRef.current = element;
+    // Use a mutable ref object
+    if (containerRef) {
+      (containerRef as React.MutableRefObject<HTMLDivElement | null>).current = element;
+    }
     inViewRef(element);
   };
 

@@ -11,13 +11,13 @@ import { JETON_ANIMATION_PRESETS } from '@/utils/sectionAnimationPresets';
 // Mock framer-motion
 vi.mock('framer-motion', () => ({
   motion: {
-    div: vi.fn(({ children, ...props }) => <div {...props}>{children}</div>)
+    div: vi.fn(({ children, ...props }: React.HTMLAttributes<HTMLDivElement> & { animate?: unknown }) => <div {...props}>{children}</div>)
   },
   useAnimation: vi.fn(() => ({
     set: vi.fn(),
     start: vi.fn(() => Promise.resolve())
   })),
-  AnimatePresence: vi.fn(({ children }) => <div>{children}</div>)
+  AnimatePresence: vi.fn(({ children }: { children: React.ReactNode }) => <div>{children}</div>)
 }));
 
 // Mock react-intersection-observer
@@ -397,7 +397,12 @@ describe('withSectionAnimations HOC', () => {
 
 describe('useSectionAnimation hook', () => {
   it('should return animation state', () => {
-    let hookResult: any;
+    let hookResult: {
+      isAnimating: boolean;
+      hasAnimated: boolean;
+      onAnimationStart: (sectionId: string) => void;
+      onAnimationComplete: (sectionId: string) => void;
+    };
 
     function TestComponent() {
       hookResult = useSectionAnimation('test-section');
@@ -413,7 +418,12 @@ describe('useSectionAnimation hook', () => {
   });
 
   it('should update state when animations start and complete', () => {
-    let hookResult: any;
+    let hookResult: {
+      isAnimating: boolean;
+      hasAnimated: boolean;
+      onAnimationStart: (sectionId: string) => void;
+      onAnimationComplete: (sectionId: string) => void;
+    };
 
     function TestComponent() {
       hookResult = useSectionAnimation('test-section');
@@ -440,7 +450,12 @@ describe('useSectionAnimation hook', () => {
   });
 
   it('should ignore events for different sections', () => {
-    let hookResult: any;
+    let hookResult: {
+      isAnimating: boolean;
+      hasAnimated: boolean;
+      onAnimationStart: (sectionId: string) => void;
+      onAnimationComplete: (sectionId: string) => void;
+    };
 
     function TestComponent() {
       hookResult = useSectionAnimation('test-section');

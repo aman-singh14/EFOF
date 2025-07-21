@@ -30,6 +30,7 @@ interface AnimatedElementState {
   controls: ReturnType<typeof useAnimation>;
   hasAnimated: boolean;
   isVisible: boolean;
+  timeoutId?: NodeJS.Timeout;
 }
 
 export default function SectionAnimationController({
@@ -64,7 +65,27 @@ export default function SectionAnimationController({
 
   // Performance settings
   const performanceSettings = PERFORMANCE_PRESETS[performanceLevel];
-  const choreography = CHOREOGRAPHY_PRESETS[choreographyType];
+  
+  // Create choreography functions
+  const getChoreographyDelay = (type: string, index: number, total?: number): number => {
+    switch (type) {
+      case 'sequential':
+        return index * 0.2;
+      case 'cascade':
+        return index * 0.1;
+      case 'centerOut':
+        if (total) {
+          const center = Math.floor(total / 2);
+          const distance = Math.abs(index - center);
+          return (distance / center) * 0.5;
+        }
+        return index * 0.15;
+      case 'random':
+        return Math.random() * 0.3;
+      default:
+        return index * 0.1;
+    }
+  };
 
   // Initialize animation configuration
   useEffect(() => {
@@ -74,6 +95,35 @@ export default function SectionAnimationController({
     }
   }, [sectionId, customAnimations]);
 
+  // Create a set of pre-initialized animation controls
+  const control1 = useAnimation();
+  const control2 = useAnimation();
+  const control3 = useAnimation();
+  const control4 = useAnimation();
+  const control5 = useAnimation();
+  const control6 = useAnimation();
+  const control7 = useAnimation();
+  const control8 = useAnimation();
+  const control9 = useAnimation();
+  const control10 = useAnimation();
+  
+  // Store all controls in an array for easy access
+  const controlsArray = [
+    control1, control2, control3, control4, control5,
+    control6, control7, control8, control9, control10
+  ];
+  
+  // Track which controls are already used
+  const usedControlsMap = useRef(new Map<string, number>());
+  const nextControlIndex = useRef(0);
+  
+  // Get the next available control
+  const getNextControl = () => {
+    const index = nextControlIndex.current % controlsArray.length;
+    nextControlIndex.current += 1;
+    return controlsArray[index];
+  };
+  
   // Initialize animated elements
   useEffect(() => {
     if (!containerRef.current || !animationConfig || isInitialized) return;
@@ -91,10 +141,11 @@ export default function SectionAnimationController({
       const foundElements = containerRef.current!.querySelectorAll(config.elements);
       
       foundElements.forEach((element, index) => {
-        const controls = useAnimation();
+        // Get the next available control
+        const controls = getNextControl();
         
         // Apply performance optimizations
-        let optimizedAnimation = { ...config.animation };
+        const optimizedAnimation = { ...config.animation };
         
         if (!performanceSettings.enableBlur) {
           // Remove blur effects
@@ -157,16 +208,8 @@ export default function SectionAnimationController({
       const { config, controls } = item;
       let calculatedDelay = config.delay || 0;
 
-      // Apply choreography
-      if (choreographyType === 'sequential') {
-        calculatedDelay += choreography.calculateDelay(index);
-      } else if (choreographyType === 'cascade') {
-        calculatedDelay += choreography.calculateDelay(index);
-      } else if (choreographyType === 'centerOut') {
-        calculatedDelay += choreography.calculateDelay(index, entranceElements.length);
-      } else if (choreographyType === 'random') {
-        calculatedDelay += choreography.calculateDelay(index);
-      }
+      // Apply choreography based on type using our custom function
+      calculatedDelay += getChoreographyDelay(choreographyType, index, entranceElements.length);
 
       // Apply stagger if specified
       if (config.stagger) {
@@ -195,14 +238,14 @@ export default function SectionAnimationController({
       }, calculatedDelay * 1000);
 
       // Store timeout for cleanup
-      (item as any).timeoutId = timeoutId;
+      (item as AnimatedElementState & { timeoutId?: NodeJS.Timeout }).timeoutId = timeoutId;
     });
 
     // Cleanup function
     return () => {
       entranceElements.forEach(item => {
-        if ((item as any).timeoutId) {
-          clearTimeout((item as any).timeoutId);
+        if ((item as AnimatedElementState & { timeoutId?: NodeJS.Timeout }).timeoutId) {
+          clearTimeout((item as AnimatedElementState & { timeoutId?: NodeJS.Timeout }).timeoutId);
         }
       });
     };
@@ -289,7 +332,10 @@ export default function SectionAnimationController({
 
   // Combine refs
   const setRefs = (element: HTMLDivElement | null) => {
-    containerRef.current = element;
+    // Use a mutable ref object
+    if (containerRef) {
+      (containerRef as React.MutableRefObject<HTMLDivElement | null>).current = element;
+    }
     inViewRef(element);
     exitRef(element);
   };

@@ -173,7 +173,7 @@ const FallingSupplies: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [dimensions, setDimensions] = React.useState({ width: 0, height: 0 });
   const [_, setRerender] = React.useState(0);
-  const bodiesRef = useRef<any[]>([]);
+  const bodiesRef = useRef<Matter.Body[]>([]);
   const engineRef = useRef<Matter.Engine | null>(null);
 
   // Responsive: update dimensions on resize

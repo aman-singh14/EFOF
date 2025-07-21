@@ -56,10 +56,11 @@ export const OptimizedVideo = memo(function OptimizedVideo({
   
   // Combine refs
   const setRefs = (element: HTMLVideoElement | null) => {
-    videoRef.current = element;
-    if (typeof ref === 'function') {
-      ref(element);
+    // Use a mutable ref object
+    if (videoRef) {
+      (videoRef as React.MutableRefObject<HTMLVideoElement | null>).current = element;
     }
+    ref(element);
   };
   
   // Handle video loading

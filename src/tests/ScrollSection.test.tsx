@@ -1,27 +1,18 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import { vi } from 'vitest';
+import { vi, it, describe } from 'vitest';
 import ScrollSection from '@/components/ScrollSection';
-import { it } from 'node:test';
-import { it } from 'node:test';
-import { it } from 'node:test';
-import { it } from 'node:test';
-import { it } from 'node:test';
-import { it } from 'node:test';
-import { it } from 'node:test';
-import { it } from 'node:test';
-import { it } from 'node:test';
-import { it } from 'node:test';
-import { describe } from 'node:test';
 
 // Mock framer-motion
 vi.mock('framer-motion', () => ({
   motion: {
-    section: React.forwardRef<HTMLElement, any>(({ children, ...props }, ref) => (
-      <section ref={ref} {...props}>
-        {children}
-      </section>
-    )),
+    section: React.forwardRef<HTMLElement, React.HTMLAttributes<HTMLElement> & { animate?: unknown }>(function MotionSection({ children, ...props }, ref) {
+      return (
+        <section ref={ref} {...props}>
+          {children}
+        </section>
+      );
+    }),
   },
 }));
 

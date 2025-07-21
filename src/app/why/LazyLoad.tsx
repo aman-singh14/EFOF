@@ -118,7 +118,7 @@ export const LazyLoadSection = memo(function LazyLoadSection({
     if (inView && !shouldRender) {
       // Use requestIdleCallback if available for non-critical rendering
       if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
-        (window as any).requestIdleCallback(() => {
+        (window as Window & { requestIdleCallback: (callback: () => void, options?: { timeout: number }) => number }).requestIdleCallback(() => {
           setShouldRender(true);
         }, { timeout: 1000 });
       } else {

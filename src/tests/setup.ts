@@ -3,10 +3,27 @@ import { vi } from 'vitest';
 
 // Mock IntersectionObserver
 global.IntersectionObserver = class IntersectionObserver {
-  constructor() {}
+  root: Element | null = null;
+  rootMargin: string = '';
+  thresholds: ReadonlyArray<number> = [];
+  
+  constructor(_callback: IntersectionObserverCallback, options?: IntersectionObserverInit) {
+    if (options) {
+      // Handle the root type correctly
+      if (options.root instanceof Element) {
+        this.root = options.root;
+      } else {
+        this.root = null;
+      }
+      this.rootMargin = options.rootMargin || '0px';
+      this.thresholds = Array.isArray(options.threshold) ? options.threshold : [options.threshold || 0];
+    }
+  }
+  
   disconnect() {}
   observe() {}
   unobserve() {}
+  takeRecords(): IntersectionObserverEntry[] { return []; }
 };
 
 // Mock requestAnimationFrame

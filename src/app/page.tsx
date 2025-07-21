@@ -7,14 +7,6 @@ import PageWrapper from "@/components/page-wrapper";
 import ScrollAnimation from "@/components/ScrollAnimation";
 import { useRef } from "react";
 import Footer from "@/components/Footer";
-import { 
-  MorphingTextReveal, 
-  CircleMaskReveal, 
-  FloatingParticles, 
-  MorphingShape, 
-  StaggeredTextReveal,
-  AnimatedLine 
-} from "@/components/EnhancedAnimations";
 
 
 
