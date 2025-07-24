@@ -187,3 +187,41 @@ html {
   scrollbar-width: thin;
   scrollbar-color: #000 #fff;
 }
+
+/* Natural smooth scrolling with transitions */
+.natural-scroll-container {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+
+/* Smooth section transitions */
+.section-transition {
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform, opacity;
+}
+
+/* Better momentum scrolling on iOS */
+@supports (-webkit-overflow-scrolling: touch) {
+  .natural-scroll-container {
+    -webkit-overflow-scrolling: touch;
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* Optimize scroll performance */
+.scroll-optimized {
+  contain: layout style paint;
+  will-change: scroll-position;
+}
+
+/* Dynamic background color transitions */
+.dynamic-background {
+  transition: background-color 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Smooth section content transitions */
+.section-content {
+  transition: color 0.5s ease-out;
+}

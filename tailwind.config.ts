@@ -17,9 +17,28 @@ export default {
           '0%': { opacity: '0' },
           '100%': { opacity: '1' },
         },
+        'float-in': {
+          '0%': { 
+            opacity: '0', 
+            transform: 'translateY(32px) scale(0.95)' 
+          },
+          '60%': { 
+            opacity: '0.8', 
+            transform: 'translateY(-8px) scale(1.02)' 
+          },
+          '100%': { 
+            opacity: '1', 
+            transform: 'translateY(0px) scale(1)' 
+          },
+        },
+        'spin-once': {
+          'to': { transform: 'rotate(360deg)' },
+        },
       },
       animation: {
         'fade': 'fade 200ms ease-in-out',
+        'float-in': 'float-in 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards',
+        'spin-once': 'spin-once 2.2s cubic-bezier(0.22, 1, 0.36, 1) 1',
       },
       colors: {
         background: 'hsl(var(--background))',

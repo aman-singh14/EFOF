@@ -56,11 +56,11 @@ const MinimalisticTriangleSection = ({ scrollContainer }: { scrollContainer: HTM
           </svg>
 
           {/* Minimalistic labels positioned around triangle */}
-          <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-full">
+          <div className="absolute top-2 left-1/2 transform -translate-x-1/2 -translate-y-full">
             <ScrollAnimation direction="up" delay={0.6} once={false}>
               <div className="text-center">
-                <div className="w-2 h-2 bg-black rounded-full mx-auto mb-2"></div>
-                <span className="text-lg md:text-xl font-medium text-black">Students of Today</span>
+                <span className="text-lg md:text-xl font-medium text-black block mb-3">Students of Today</span>
+                <div className="w-2 h-2 bg-black rounded-full mx-auto"></div>
               </div>
             </ScrollAnimation>
           </div>
@@ -166,14 +166,11 @@ export default function Home() {
   const [isMounted, setIsMounted] = useState(false);
   const [pageLoaded, setPageLoaded] = useState(false);
   const [currentSection, setCurrentSection] = useState(0);
-  const [isScrolling, setIsScrolling] = useState(false);
-  const [bounceStates, setBounceStates] = useState([false, false]);
+  const [animateStates, setAnimateStates] = useState([false, false]);
+  const [hasTriggeredBlueprint, setHasTriggeredBlueprint] = useState(false);
+  const [backgroundColor, setBackgroundColor] = useState('black');
   const blueprintRef = useRef<HTMLDivElement>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
-  const sectionsRef = useRef<HTMLElement[]>([]);
-
-  // Total number of sections
-  const totalSections = 6; // Hero, Blueprint, Why, Triangle, Testimonials, Team (with integrated footer)
 
   // Ensure component is mounted and add initial fade-in
   useEffect(() => {
@@ -185,124 +182,95 @@ export default function Home() {
     return () => clearTimeout(timer);
   }, []);
 
-  // Smooth scroll to section function
-  const scrollToSection = (sectionIndex: number) => {
-    if (!scrollContainerRef.current || isScrolling) return;
-
-    setIsScrolling(true);
-    const container = scrollContainerRef.current;
-    const targetY = sectionIndex * window.innerHeight;
-
-    container.scrollTo({
-      top: targetY,
-      behavior: 'smooth'
-    });
-
-    // Reset scrolling state after animation
-    setTimeout(() => {
-      setIsScrolling(false);
-      setCurrentSection(sectionIndex);
-    }, 800);
-  };
-
-  // Handle wheel events for section navigation
+  // Handle scroll events for animations, section tracking, and background color transitions
   useEffect(() => {
     if (!isMounted || !scrollContainerRef.current) return;
 
     const container = scrollContainerRef.current;
-    let wheelTimeout: NodeJS.Timeout;
 
-    const handleWheel = (e: WheelEvent) => {
-      e.preventDefault();
-
-      if (isScrolling) return;
-
-      // Clear previous timeout
-      clearTimeout(wheelTimeout);
-
-      // Add small delay to prevent too rapid scrolling
-      wheelTimeout = setTimeout(() => {
-        const direction = e.deltaY > 0 ? 1 : -1;
-        const nextSection = Math.max(0, Math.min(totalSections - 1, currentSection + direction));
-
-        if (nextSection !== currentSection) {
-          scrollToSection(nextSection);
-        }
-      }, 50);
-    };
-
-    container.addEventListener('wheel', handleWheel, { passive: false });
-
-    return () => {
-      container.removeEventListener('wheel', handleWheel);
-      clearTimeout(wheelTimeout);
-    };
-  }, [currentSection, isScrolling, isMounted, totalSections]);
-
-  // Handle sequential bounce animation for team section
-  useEffect(() => {
-    if (currentSection === 5) {
-      // Reset bounce states first
-      setBounceStates([false, false]);
-      
-      // Start first bounce immediately
-      setTimeout(() => {
-        setBounceStates([true, false]);
-      }, 800); // Delay to let section load
-      
-      // Start second bounce after first one completes
-      setTimeout(() => {
-        setBounceStates([false, true]);
-      }, 1600); // 800ms delay + 800ms for first bounce to complete
-      
-      // Reset both after animations complete
-      setTimeout(() => {
-        setBounceStates([false, false]);
-      }, 3200);
-    } else {
-      setBounceStates([false, false]);
-    }
-  }, [currentSection]);
-
-  // Handle scroll events for animations and current section tracking
-  useEffect(() => {
-    if (!isMounted || !scrollContainerRef.current) return;
+    // Section colors mapping
+    const sectionColors = ['black', 'white', 'black', 'white', 'black']; // Hero, Blueprint, Why, Triangle, Team
 
     const handleScroll = () => {
-      const container = scrollContainerRef.current;
       if (!container) return;
 
-      // Update current section based on scroll position
       const scrollTop = container.scrollTop;
-      const newSection = Math.round(scrollTop / window.innerHeight);
+      const viewportHeight = window.innerHeight;
+      const totalSections = 5;
 
-      if (newSection !== currentSection && !isScrolling) {
-        setCurrentSection(newSection);
+      // Calculate which section we're transitioning to based on scroll position
+      const currentSectionFloat = scrollTop / viewportHeight;
+      const currentSectionIndex = Math.floor(currentSectionFloat);
+      const nextSectionIndex = Math.min(currentSectionIndex + 1, totalSections - 1);
+      const transitionProgress = currentSectionFloat - currentSectionIndex;
+
+      // Update current section for other UI elements
+      const dominantSection = Math.round(currentSectionFloat);
+      if (dominantSection !== currentSection) {
+        setCurrentSection(dominantSection);
+
+        // Handle team section natural animation
+        if (dominantSection === 4) {
+          setAnimateStates([false, false]);
+          setTimeout(() => setAnimateStates([true, false]), 200);
+          setTimeout(() => setAnimateStates([true, true]), 600);
+        }
       }
 
-      // Handle blueprint circle animation
-      if (!animateCircle && blueprintRef.current) {
-        const rect = blueprintRef.current.getBoundingClientRect();
-        const containerRect = container.getBoundingClientRect();
-        const isInView = rect.top <= containerRect.height * 0.5 && rect.bottom >= containerRect.height * 0.5;
-
-        if (isInView) {
-          console.log('Blueprint section in view, starting animation');
-          setAnimateCircle(true);
-        }
+      // Determine background color based on scroll position
+      // Start transitioning when we're 30% into the current section
+      if (transitionProgress > 0.3 && currentSectionIndex < totalSections - 1) {
+        const nextColor = sectionColors[nextSectionIndex];
+        setBackgroundColor(nextColor);
+      } else {
+        const currentColor = sectionColors[currentSectionIndex];
+        setBackgroundColor(currentColor);
       }
     };
 
-    const container = scrollContainerRef.current;
-    container.addEventListener('scroll', handleScroll);
-    handleScroll(); // Check immediately
+    // Intersection Observer for blueprint animation
+    const blueprintObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting && !hasTriggeredBlueprint) {
+          console.log('Blueprint section in view, starting animation');
+          setAnimateCircle(true);
+          setHasTriggeredBlueprint(true);
+        } else if (!entry.isIntersecting && hasTriggeredBlueprint) {
+          // Reset animation when section is out of view
+          setAnimateCircle(false);
+          setHasTriggeredBlueprint(false);
+        }
+      });
+    }, {
+      root: container,
+      rootMargin: '-20% 0px -20% 0px',
+      threshold: 0.2
+    });
 
-    return () => container.removeEventListener('scroll', handleScroll);
-  }, [animateCircle, currentSection, isScrolling, isMounted]);
+    // Observe blueprint section specifically
+    if (blueprintRef.current) {
+      blueprintObserver.observe(blueprintRef.current);
+    }
+
+    // Add scroll listener
+    container.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll(); // Initial call
+
+    return () => {
+      container.removeEventListener('scroll', handleScroll);
+      blueprintObserver.disconnect();
+    };
+  }, [currentSection, hasTriggeredBlueprint, isMounted]);
 
   return (
     <PageWrapper>
       <div className="relative">
+        {/* Dynamic Background that transitions with scroll */}
+        <div 
+          className="fixed inset-0 z-0 dynamic-background"
+          style={{ backgroundColor: backgroundColor }}
+        />
+        
         {/* Fixed Navigation - Dynamic logo based on current section */}
         <div className="fixed top-6 left-6 z-50 hidden md:block">
           <Link href="/" aria-label="Home">
@@ -329,16 +297,10 @@ export default function Home() {
 
         <div
           ref={scrollContainerRef}
-          className={`h-screen overflow-y-scroll transition-opacity duration-1000 ${pageLoaded ? 'opacity-100' : 'opacity-0'}`}
-          style={{
-            scrollBehavior: 'smooth',
-            overscrollBehavior: 'contain',
-            // Add momentum scrolling for iOS
-            WebkitOverflowScrolling: 'touch'
-          }}
+          className={`relative z-10 h-screen overflow-y-auto natural-scroll-container scroll-optimized transition-opacity duration-1000 ${pageLoaded ? 'opacity-100' : 'opacity-0'}`}
         >
           {/* Hero Section - Minimalistic full-screen impact */}
-          <section className="relative h-screen snap-start overflow-hidden">
+          <section data-section-index="0" className="relative h-screen overflow-hidden">
             <video
               autoPlay
               muted
@@ -364,16 +326,26 @@ export default function Home() {
               {/* Bottom right - Subtitle */}
               <div className="flex justify-end items-end">
                 <ScrollAnimation direction="left" delay={0.6} once={false}>
-                  <p className="text-lg md:text-xl text-white/90 max-w-md text-right leading-relaxed">
-                    The first student-led initiative transforming K-12 education through technology and reform
-                  </p>
+                  <div className="text-right">
+                    <p className="text-lg md:text-xl text-white/90 max-w-md leading-relaxed mb-4">
+                      The first student-led initiative transforming K-12 education through technology and reform
+                    </p>
+                    <div className="flex items-center justify-end gap-2 text-white/60 text-sm">
+                      <span>Scroll to explore</span>
+                      <div className="animate-pulse">
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M19 14l-7 7m0 0l-7-7m0 0l7-7" />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
                 </ScrollAnimation>
               </div>
             </div>
           </section>
 
           {/* Blueprint Section - Full screen minimalistic layout */}
-          <section ref={blueprintRef} className="relative h-screen snap-start bg-white text-black overflow-hidden">
+          <section data-section-index="1" ref={blueprintRef} className="relative h-screen text-black overflow-hidden">
             {/* Black Circle Reveal Overlay only covers blueprint section */}
             <BlackCircleRevealOverlay shouldAnimate={animateCircle} />
 
@@ -407,7 +379,7 @@ export default function Home() {
             </div>
           </section>
           {/* Why Section - Full screen minimalistic layout */}
-          <section className="relative h-screen snap-start bg-black text-white overflow-hidden">
+          <section data-section-index="2" className="relative h-screen text-white overflow-hidden">
             <div className="h-screen flex flex-col justify-between p-8 md:p-16 relative z-10">
               {/* Top left - Question */}
               <div className="flex items-start justify-start pt-16">
@@ -456,15 +428,15 @@ export default function Home() {
           </section>
 
           {/* Triangle Section */}
-          <section className="relative h-screen snap-start bg-white text-black">
+          <section data-section-index="3" className="relative h-screen text-black">
             <MinimalisticTriangleSection scrollContainer={scrollContainerRef.current} />
           </section>
 
 
           {/* Team Section with Integrated Footer - No snap scroll between them */}
-          <section className="relative bg-black text-white">
+          <section data-section-index="4" className="relative text-white">
             {/* Team Content */}
-            <div className="h-screen snap-start flex flex-col justify-between p-8 md:p-16 relative">
+            <div className="h-screen flex flex-col justify-between p-8 md:p-16 relative">
               {/* Top left - Title */}
               <div className="flex items-start justify-start pt-16">
                 <ScrollAnimation direction="up" delay={0.2} once={false}>
@@ -478,27 +450,33 @@ export default function Home() {
               {/* Center - Team members with sequential bounce animation */}
               <div className="flex-1 flex items-center justify-center">
                 <ScrollAnimation direction="up" delay={0.6} once={false}>
-                  <div className="flex justify-center gap-16 md:gap-20 max-w-2xl">
+                  <div className="flex justify-center gap-20 md:gap-32 max-w-4xl">
                     {[
-                      { name: "Rishal Melvani", role: "Founder" },
-                      { name: "Ishaan Singh", role: "Founder" }
+                      { name: "Rishal Melvani", role: "Founder", image: "/rishal melvani.png" },
+                      { name: "Ishaan Singh", role: "Founder", image: "/ishaan singh.png" }
                     ].map((member, index) => (
                       <div key={index} className="text-center group">
                         <div 
-                          className={`w-24 h-24 md:w-28 md:h-28 mx-auto mb-6 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 overflow-hidden group-hover:bg-white/20 transition-all duration-200 ${
-                            bounceStates[index] ? 'animate-bounce' : ''
+                          className={`w-36 h-36 md:w-48 md:h-48 lg:w-56 lg:h-56 mx-auto mb-8 overflow-hidden rounded-full bg-white/10 backdrop-blur-sm border border-white/20 group-hover:bg-white/20 transition-all duration-700 shadow-lg transform ${
+                            animateStates[index] ? 'animate-float-in' : 'opacity-0 translate-y-8 scale-95'
                           }`}
-                          style={{
-                            animationDuration: bounceStates[index] ? '0.6s' : undefined,
-                            animationIterationCount: bounceStates[index] ? '3' : undefined
-                          }}
                         >
-                          <div className="w-full h-full bg-white/20 flex items-center justify-center">
-                            <div className="w-3 h-3 bg-white rounded-full"></div>
+                          <div className="w-full h-full relative">
+                            <Image 
+                              src={member.image} 
+                              alt={member.name} 
+                              fill
+                              sizes="(max-width: 768px) 144px, (max-width: 1024px) 192px, 224px"
+                              className="object-cover"
+                              style={{ 
+                                objectPosition: index === 0 ? "center 10%" : "center center"
+                              }}
+                              priority
+                            />
                           </div>
                         </div>
-                        <h3 className="text-base md:text-lg font-medium text-white mb-2 leading-tight">{member.name}</h3>
-                        <p className="text-sm md:text-base text-white/60">{member.role}</p>
+                        <h3 className="text-lg md:text-xl lg:text-2xl font-medium text-white mb-2 leading-tight">{member.name}</h3>
+                        <p className="text-base md:text-lg text-white/70">{member.role}</p>
                       </div>
                     ))}
                   </div>

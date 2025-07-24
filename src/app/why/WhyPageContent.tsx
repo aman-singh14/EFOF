@@ -53,7 +53,7 @@ const educationStatistics = [
 const WhyPageContent = () => {
   const [pageLoaded, setPageLoaded] = useState(false);
   const [currentSection, setCurrentSection] = useState(0);
-  const [isScrolling, setIsScrolling] = useState(false);
+  const [backgroundColor, setBackgroundColor] = useState('white');
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   // Calculate total sections: Hero + Questions + Context + Statistics + Vision + Action
@@ -63,60 +63,83 @@ const WhyPageContent = () => {
     setPageLoaded(true);
   }, []);
 
-  // Smooth scroll to section function
-  const scrollToSection = (sectionIndex: number) => {
-    if (!scrollContainerRef.current || isScrolling) return;
-    
-    setIsScrolling(true);
-    const container = scrollContainerRef.current;
-    const targetY = sectionIndex * window.innerHeight;
-    
-    container.scrollTo({
-      top: targetY,
-      behavior: 'smooth'
-    });
-
-    setTimeout(() => {
-      setIsScrolling(false);
-      setCurrentSection(sectionIndex);
-    }, 800);
-  };
-
-  // Handle wheel events for section navigation
+  // Handle scroll events for background color transitions and section tracking
   useEffect(() => {
     if (!scrollContainerRef.current) return;
 
     const container = scrollContainerRef.current;
-    let wheelTimeout: NodeJS.Timeout;
 
-    const handleWheel = (e: WheelEvent) => {
-      e.preventDefault();
+    // Define section colors based on the alternating pattern
+    // Hero(0)=white, Q1(1)=black, Q2(2)=white, Q3(3)=black, Context(4)=white, 
+    // Stat1(5)=black, Stat2(6)=white, Stat3(7)=black, Stat4(8)=white, Vision(9)=black, Action(10)=white
+    const getSectionColor = (sectionIndex: number) => {
+      // Hero (0) = white
+      if (sectionIndex === 0) return 'white';
+      // Questions (1,2,3) = alternating starting with black
+      if (sectionIndex >= 1 && sectionIndex <= 3) {
+        return sectionIndex % 2 === 1 ? 'black' : 'white';
+      }
+      // Context (4) = white
+      if (sectionIndex === 4) return 'white';
+      // Statistics (5,6,7,8) = alternating starting with black
+      if (sectionIndex >= 5 && sectionIndex <= 8) {
+        return sectionIndex % 2 === 1 ? 'black' : 'white';
+      }
+      // Vision (9) = black
+      if (sectionIndex === 9) return 'black';
+      // Action (10) = white
+      if (sectionIndex === 10) return 'white';
       
-      if (isScrolling) return;
-
-      clearTimeout(wheelTimeout);
-      
-      wheelTimeout = setTimeout(() => {
-        const direction = e.deltaY > 0 ? 1 : -1;
-        const nextSection = Math.max(0, Math.min(totalSections - 1, currentSection + direction));
-        
-        if (nextSection !== currentSection) {
-          scrollToSection(nextSection);
-        }
-      }, 50);
+      return 'white'; // fallback
     };
 
-    container.addEventListener('wheel', handleWheel, { passive: false });
-    
+    const handleScroll = () => {
+      if (!container) return;
+
+      const scrollTop = container.scrollTop;
+      const viewportHeight = window.innerHeight;
+
+      // Calculate which section we're transitioning to based on scroll position
+      const currentSectionFloat = scrollTop / viewportHeight;
+      const currentSectionIndex = Math.floor(currentSectionFloat);
+      const nextSectionIndex = Math.min(currentSectionIndex + 1, totalSections - 1);
+      const transitionProgress = currentSectionFloat - currentSectionIndex;
+
+      // Update current section for other UI elements
+      const dominantSection = Math.round(currentSectionFloat);
+      if (dominantSection !== currentSection) {
+        setCurrentSection(dominantSection);
+      }
+
+      // Determine background color based on scroll position
+      // Start transitioning when we're 30% into the current section
+      if (transitionProgress > 0.3 && currentSectionIndex < totalSections - 1) {
+        const nextColor = getSectionColor(nextSectionIndex);
+        setBackgroundColor(nextColor);
+      } else {
+        const currentColor = getSectionColor(currentSectionIndex);
+        setBackgroundColor(currentColor);
+      }
+    };
+
+    // Add scroll listener
+    container.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll(); // Initial call
+
     return () => {
-      container.removeEventListener('wheel', handleWheel);
-      clearTimeout(wheelTimeout);
+      container.removeEventListener('scroll', handleScroll);
     };
-  }, [currentSection, isScrolling, totalSections]);
+  }, [currentSection, totalSections]);
 
   return (
     <PageWrapper>
       <div className="relative">
+        {/* Dynamic Background that transitions with scroll */}
+        <div 
+          className="fixed inset-0 z-0 dynamic-background"
+          style={{ backgroundColor: backgroundColor }}
+        />
+        
         {/* Fixed Navigation - Dynamic logo based on current section */}
         <div className="fixed top-6 left-6 z-50 hidden md:block">
           <Link href="/" aria-label="Home">
@@ -168,15 +191,10 @@ const WhyPageContent = () => {
 
         <div 
           ref={scrollContainerRef}
-          className={`h-screen overflow-y-scroll transition-opacity duration-1000 ${pageLoaded ? 'opacity-100' : 'opacity-0'}`}
-          style={{
-            scrollBehavior: 'smooth',
-            overscrollBehavior: 'contain',
-            WebkitOverflowScrolling: 'touch'
-          }}
+          className={`relative z-10 h-screen overflow-y-auto natural-scroll-container scroll-optimized transition-opacity duration-1000 ${pageLoaded ? 'opacity-100' : 'opacity-0'}`}
         >
           {/* Hero Section - Title */}
-          <section className="relative h-screen snap-start overflow-hidden bg-white">
+          <section className="relative h-screen overflow-hidden">
             <div className="h-screen flex flex-col justify-center items-center p-8 md:p-16 relative z-10">
               <ScrollAnimation direction="up" delay={0.2} once={false}>
                 <h1 className="text-6xl md:text-8xl lg:text-9xl font-bold text-black leading-[0.8] tracking-tight text-center mb-8">
@@ -213,7 +231,7 @@ const WhyPageContent = () => {
             };
 
             return (
-              <section key={index} className={`relative h-screen snap-start overflow-hidden ${isBlackBg ? 'bg-black text-white' : 'bg-white text-black'}`}>
+              <section key={index} className={`relative h-screen overflow-hidden ${isBlackBg ? 'text-white' : 'text-black'}`}>
                 {/* Subtle background elements for visual interest */}
                 <div className="absolute inset-0 overflow-hidden pointer-events-none">
                   {/* Floating geometric shapes positioned to complement staircase */}
@@ -255,7 +273,7 @@ const WhyPageContent = () => {
           })}
 
           {/* Context Section - Full screen layout */}
-          <section className="relative h-screen snap-start bg-white text-black">
+          <section className="relative h-screen text-black">
             <div className="h-screen flex flex-col justify-between p-8 md:p-16 relative z-10">
               {/* Top right - Problem statement */}
               <div className="flex items-start justify-end pt-16">
@@ -305,7 +323,7 @@ const WhyPageContent = () => {
             const isBlackBg = overallIndex % 2 === 1; // Changed logic: odd sections are black
             
             return (
-              <section key={index} className={`relative h-screen snap-start ${isBlackBg ? 'bg-black' : 'bg-white'}`}>
+              <section key={index} className="relative h-screen">
                 <div className="h-screen flex flex-col justify-between p-8 md:p-16 relative z-10">
                   {/* Massive number - center focus */}
                   <div className="flex-1 flex items-center justify-center">
@@ -338,7 +356,7 @@ const WhyPageContent = () => {
           })}
 
           {/* Vision Section - Full screen layout */}
-          <section className="relative h-screen snap-start bg-black text-white">
+          <section className="relative h-screen text-white">
             <div className="h-screen flex flex-col justify-between p-8 md:p-16 relative z-10">
               {/* Top left - Title */}
               <div className="flex items-start justify-start pt-16">
@@ -376,7 +394,7 @@ const WhyPageContent = () => {
           </section>
 
           {/* Action Section - Final call to action */}
-          <section className="relative h-screen snap-start bg-white">
+          <section className="relative h-screen">
             <div className="h-screen flex flex-col justify-center items-center p-8 md:p-16 relative z-10">
               <ScrollAnimation direction="up" delay={0.2} once={false}>
                 <div className="text-center max-w-4xl">
