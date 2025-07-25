@@ -394,11 +394,13 @@ export default function Home() {
               <div className="flex-1 flex items-center justify-end">
                 <ScrollAnimation direction="left" delay={0.6} once={false}>
                   <div className="max-w-2xl text-right">
+                    <br />
                     <p className="text-xl md:text-2xl lg:text-3xl text-white/90 leading-relaxed mb-8 font-light">
                       The education system was built from the perspective of outsiders looking in, but it's time that changes.
-                    </p>
-                    <p className="text-lg md:text-xl text-white/70 leading-relaxed mb-8">
-                      K-12 is expected to undergo its most significant transformation of the past century. We are placing students atr the forefront of this revolution.
+                    </p> 
+                    <br />
+                    <p className="text-xl md:text-2xl lg:text-3xl text-white/90 leading-relaxed mb-8 font-light">
+                      K-12 is expected to undergo its most significant transformation of the past century. We are placing students at the forefront of this revolution.
                     </p>
                   </div>
                 </ScrollAnimation>
