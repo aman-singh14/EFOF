@@ -59,7 +59,7 @@ const MinimalisticTriangleSection = ({ scrollContainer }: { scrollContainer: HTM
           <div className="absolute top-2 left-1/2 transform -translate-x-1/2 -translate-y-full">
             <ScrollAnimation direction="up" delay={0.6} once={false}>
               <div className="text-center">
-                <span className="text-lg md:text-xl font-medium text-black block mb-3">Students of Today</span>
+                <span className="text-lg md:text-xl font-medium text-black block mb-3">Today's Students</span>
                 <div className="w-2 h-2 bg-black rounded-full mx-auto"></div>
               </div>
             </ScrollAnimation>
@@ -69,7 +69,7 @@ const MinimalisticTriangleSection = ({ scrollContainer }: { scrollContainer: HTM
             <ScrollAnimation direction="left" delay={0.8} once={false}>
               <div className="text-center">
                 <div className="w-2 h-2 bg-black rounded-full mx-auto mb-2"></div>
-                <span className="text-lg md:text-xl font-medium text-black">Future of EdTech</span>
+                <span className="text-lg md:text-xl font-medium text-black">Ed-Tech Companies</span>
               </div>
             </ScrollAnimation>
           </div>
@@ -78,7 +78,7 @@ const MinimalisticTriangleSection = ({ scrollContainer }: { scrollContainer: HTM
             <ScrollAnimation direction="right" delay={1.0} once={false}>
               <div className="text-center">
                 <div className="w-2 h-2 bg-black rounded-full mx-auto mb-2"></div>
-                <span className="text-lg md:text-xl font-medium text-black">Education Advisors</span>
+                <span className="text-lg md:text-xl font-medium text-black">Education Researchers</span>
               </div>
             </ScrollAnimation>
           </div>
@@ -328,7 +328,7 @@ export default function Home() {
                 <ScrollAnimation direction="left" delay={0.6} once={false}>
                   <div className="text-right">
                     <p className="text-lg md:text-xl text-white/90 max-w-md leading-relaxed mb-4">
-                      The first student-led initiative transforming K-12 education through technology and reform
+                      The first student-led blueprint for K-12 education, targeted for 2035.
                     </p>
                     <div className="flex items-center justify-end gap-2 text-white/60 text-sm">
                       <span>Scroll to explore</span>
@@ -354,10 +354,10 @@ export default function Home() {
               <div className="flex-1 flex items-center justify-start pt-16">
                 <ScrollAnimation direction="up" delay={0.8} once={false}>
                   <h2 className="text-3xl md:text-5xl lg:text-7xl font-bold text-black leading-[0.95] tracking-tight max-w-5xl">
-                    The first student-led<br />
-                    blueprint for<br />
-                    transforming the<br />
-                    U.S. K-12 space
+                    We're developing briefs<br />
+                    on specific changes<br />
+                    we hope to see in<br />
+                    the education space
                   </h2>
                 </ScrollAnimation>
               </div>
@@ -367,9 +367,9 @@ export default function Home() {
                 <ScrollAnimation direction="left" delay={1.4} once={false}>
                   <div className="max-w-4xl text-right">
                     <h2 className="text-3xl md:text-5xl lg:text-7xl font-bold text-black leading-[0.95] tracking-tight mb-4">
-                      Connecting structural<br />
-                      school reform with<br />
-                      developments in<br />
+                      AND conducting<br />
+                      the first student <br />
+                      evaluations of<br />
                       education technology
                     </h2>
                     <div className="w-24 h-0.5 bg-black ml-auto"></div>
@@ -398,7 +398,7 @@ export default function Home() {
                       The education system was built from the perspective of outsiders looking in, but it's time that changes.
                     </p>
                     <p className="text-lg md:text-xl text-white/70 leading-relaxed mb-8">
-                      Public education as we know it is falling apart. Students aren't engaged, don't learn future-ready skills, and the system fails to inspire them to realize their calling.
+                      K-12 is expected to undergo its most significant transformation of the past century. We are placing students atr the forefront of this revolution.
                     </p>
                   </div>
                 </ScrollAnimation>
