@@ -10,6 +10,26 @@ export const metadata: Metadata = {
     icon: "/EFOF Logo.png",
     apple: "/EFOF Logo.png",
   },
+  openGraph: {
+    title: "Education for Our Futures",
+    description: "Empowering the next generation through education",
+    images: [
+      {
+        url: "/White EFOF Logo.png",
+        width: 1200,
+        height: 630,
+        alt: "Education for Our Futures Logo",
+      },
+    ],
+    type: "website",
+    siteName: "Education for Our Futures",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Education for Our Futures",
+    description: "Empowering the next generation through education",
+    images: ["/White EFOF Logo.png"],
+  },
 };
 
 export default function RootLayout({
@@ -17,13 +37,31 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Get the current URL for canonical URL
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://educationforourfutures.org';
+  const canonicalUrl = `${siteUrl}${typeof window !== 'undefined' ? window.location.pathname : ''}`;
+
   return (
     <html lang="en" className="dark">
       <head>
+        {/* Viewport meta tag for responsive design */}
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+        
+        {/* Canonical URL to prevent duplicate content */}
+        <link rel="canonical" href={canonicalUrl} />
+        
+        {/* Language and region targeting */}
+        <meta httpEquiv="content-language" content="en" />
+        <meta name="geo.region" content="US" />
+        
+        {/* Theme color */}
         <meta name="theme-color" content="#000000" />
+        
+        {/* External Scripts */}
         <Script
           crossOrigin="anonymous"
           src="//unpkg.com/same-runtime/dist/index.global.js"
+          strategy="afterInteractive"
         />
       </head>
       <body suppressHydrationWarning className="antialiased font-serif">
