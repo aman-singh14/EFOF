@@ -272,14 +272,14 @@ export default function Home() {
     const container = scrollContainerRef.current;
 
     // Section colors mapping
-    const sectionColors = ['black', 'white', 'black', 'white', 'black']; // Hero, Blueprint, Why, Triangle, Team
+    const sectionColors = ['black', 'white', 'white', 'black', 'white', 'black']; // Hero, Mission, Blueprint, Why, Triangle, Team
 
     const handleScroll = () => {
       if (!container) return;
 
       const scrollTop = container.scrollTop;
       const viewportHeight = window.innerHeight;
-      const totalSections = 5;
+      const totalSections = 6;
 
       // Calculate which section we're transitioning to based on scroll position
       const currentSectionFloat = scrollTop / viewportHeight;
@@ -293,7 +293,7 @@ export default function Home() {
         setCurrentSection(dominantSection);
 
         // Handle team section natural animation
-        if (dominantSection === 4) {
+        if (dominantSection === 5) {
           setAnimateStates([false, false]);
           setTimeout(() => setAnimateStates([true, false]), 200);
           setTimeout(() => setAnimateStates([true, true]), 600);
@@ -301,8 +301,11 @@ export default function Home() {
       }
 
       // Determine background color based on scroll position
-      // Start transitioning when we're 30% into the current section
-      if (transitionProgress > 0.3 && currentSectionIndex < totalSections - 1) {
+      // Use different transition thresholds for mobile vs desktop
+      const isMobile = window.innerWidth < 768;
+      const transitionThreshold = isMobile ? 0.7 : 0.3; // Mobile: 70%, Desktop: 30%
+      
+      if (transitionProgress > transitionThreshold && currentSectionIndex < totalSections - 1) {
         const nextColor = sectionColors[nextSectionIndex];
         setBackgroundColor(nextColor);
       } else {
@@ -337,10 +340,23 @@ export default function Home() {
 
     // Add scroll listener
     container.addEventListener('scroll', handleScroll, { passive: true });
+    
+    // Add debounced resize listener to handle orientation changes
+    let resizeTimeout: NodeJS.Timeout;
+    const handleResize = () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        handleScroll(); // Recalculate on resize
+      }, 100);
+    };
+    window.addEventListener('resize', handleResize, { passive: true });
+    
     handleScroll(); // Initial call
 
     return () => {
       container.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleResize);
+      clearTimeout(resizeTimeout);
       blueprintObserver.disconnect();
     };
   }, [currentSection, hasTriggeredBlueprint]);
@@ -358,7 +374,7 @@ export default function Home() {
         <div className="fixed top-4 left-4 md:top-6 md:left-6 z-50 hidden md:block">
           <Link href="/" aria-label="Home">
             <Logo
-              variant={currentSection === 1 || currentSection === 3 ? "black" : "white"}
+              variant={currentSection === 1 || currentSection === 2 || currentSection === 4 ? "black" : "white"}
               size="md"
               priority={true}
             />
@@ -367,7 +383,7 @@ export default function Home() {
         <div className="sticky top-0 left-0 z-50 block md:hidden bg-transparent pt-2 pl-2">
           <Link href="/" aria-label="Home">
             <Logo
-              variant={currentSection === 1 || currentSection === 3 ? "black" : "white"}
+              variant={currentSection === 1 || currentSection === 2 || currentSection === 4 ? "black" : "white"}
               size="sm"
               priority={true}
             />
@@ -381,8 +397,41 @@ export default function Home() {
           {/* Hero Section - NO VIDEO, optimized for LCP */}
           <OptimizedHeroSection />
 
+          {/* Our Mission Section */}
+          <section data-section-index="1" className="relative h-screen text-black overflow-hidden">
+            <div className="h-screen flex flex-col justify-between mobile-container mobile-padding-responsive relative z-10">
+              {/* Top left - Title */}
+              <div className="flex items-start justify-start pt-12 sm:pt-16">
+                <ScrollAnimation direction="up" delay={0.2} once={false}>
+                  <h2 className="mobile-text-large font-bold text-black tracking-tight">
+                    Our<br />
+                    <span className="text-black/70">Mission</span>
+                  </h2>
+                </ScrollAnimation>
+              </div>
+
+              {/* Center - Mission statement */}
+              <div className="flex-1 flex items-center justify-center">
+                <ScrollAnimation direction="up" delay={0.6} once={false}>
+                  <div className="max-w-4xl text-center">
+                    <p className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl text-black font-medium leading-tight">
+                      Education for Our Futures's mission as a student collective is to rethink K-12 through a blueprint and putting students at the forefront of education technology.
+                    </p>
+                  </div>
+                </ScrollAnimation>
+              </div>
+
+              {/* Bottom - Decorative line */}
+              <div className="flex justify-center items-end">
+                <ScrollAnimation direction="up" delay={1.0} once={false}>
+                  <div className="w-24 sm:w-32 h-0.5 bg-black"></div>
+                </ScrollAnimation>
+              </div>
+            </div>
+          </section>
+
           {/* Blueprint Section - Full screen minimalistic layout */}
-          <section data-section-index="1" ref={blueprintRef} className="relative h-screen text-black overflow-hidden">
+          <section data-section-index="2" ref={blueprintRef} className="relative h-screen text-black overflow-hidden">
             {/* Black Circle Reveal Overlay only covers blueprint section */}
             <BlackCircleRevealOverlay shouldAnimate={animateCircle} />
 
@@ -390,7 +439,7 @@ export default function Home() {
               {/* Top section - First statement */}
               <div className="flex-1 flex items-center justify-start pt-12 sm:pt-16">
                 <ScrollAnimation direction="up" delay={0.8} once={false}>
-                  <h2 className="mobile-text-large font-bold text-black tracking-tight max-w-full">
+                  <h2 className="mobile-text-responsive font-bold text-black tracking-tight max-w-full">
                     We're developing briefs<br />
                     on specific changes<br />
                     we hope to see in<br />
@@ -403,7 +452,7 @@ export default function Home() {
               <div className="flex justify-center sm:justify-end items-end">
                 <ScrollAnimation direction="left" delay={1.4} once={false}>
                   <div className="max-w-full text-center sm:text-right">
-                    <h2 className="mobile-text-large font-bold text-black tracking-tight mb-4">
+                    <h2 className="mobile-text-responsive font-bold text-black tracking-tight mb-4">
                       AND conducting<br />
                       the first student <br />
                       evaluations of<br />
@@ -416,7 +465,7 @@ export default function Home() {
             </div>
           </section>
           {/* Why Section - Full screen minimalistic layout */}
-          <section data-section-index="2" className="relative h-screen text-white overflow-hidden">
+          <section data-section-index="3" className="relative h-screen text-white overflow-hidden">
             <div className="h-screen flex flex-col justify-between mobile-container mobile-padding-responsive relative z-10">
               {/* Top left - Question */}
               <div className="flex items-start justify-start pt-12 sm:pt-16">
@@ -467,13 +516,13 @@ export default function Home() {
           </section>
 
           {/* Triangle Section */}
-          <section data-section-index="3" className="relative h-screen text-black">
+          <section data-section-index="4" className="relative h-screen text-black">
             <MinimalisticTriangleSection scrollContainer={scrollContainerRef.current} />
           </section>
 
 
           {/* Team Section with Integrated Footer - No snap scroll between them */}
-          <section data-section-index="4" className="relative text-white">
+          <section data-section-index="5" className="relative text-white">
             {/* Team Content */}
             <div className="h-screen flex flex-col justify-between mobile-container mobile-padding-responsive relative">
               {/* Top left - Title */}

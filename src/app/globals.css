@@ -310,6 +310,13 @@ html {
   transition: background-color 0.7s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* Faster transitions on mobile for better UX */
+@media (max-width: 767px) {
+  .dynamic-background {
+    transition: background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
+
 /* Smooth section content transitions */
 .section-content {
   transition: color 0.5s ease-out;

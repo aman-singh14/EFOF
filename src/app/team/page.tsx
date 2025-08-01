@@ -193,12 +193,12 @@ export default function Team() {
       <div className="relative overflow-x-hidden max-w-full">
         {/* Fixed Background */}
         <div className="fixed inset-0 z-0 bg-black" />
-        
+
         {/* Fixed Navigation */}
         <div className="fixed top-4 left-4 md:top-6 md:left-6 z-50 hidden md:block">
           <Link href="/" aria-label="Home">
-            <Logo 
-              variant="white" 
+            <Logo
+              variant="white"
               size="md"
               priority
             />
@@ -206,8 +206,8 @@ export default function Team() {
         </div>
         <div className="sticky top-0 left-0 z-50 block md:hidden bg-transparent pt-2 pl-2">
           <Link href="/" aria-label="Home">
-            <Logo 
-              variant="white" 
+            <Logo
+              variant="white"
               size="sm"
               priority
             />
@@ -216,136 +216,164 @@ export default function Team() {
 
         {/* Container for layered sections */}
         <div className="relative z-10 h-screen overflow-hidden max-w-full">
-        {/* Introduction Section */}
-        <div
-          className={`absolute inset-0 w-full h-full flex items-center justify-center ${getSectionColors(0).bg}`}
-          style={getSectionStyle(0)}
-          data-section="0"
-        >
-          <div className="container mx-auto px-4 sm:px-6 max-w-full">
-            <FadeIn>
-              <div className="text-center">
-                <h1 className={`text-3xl sm:text-4xl md:text-6xl font-light ${getSectionColors(0).text} mb-4`}>
-                  Our Team
-                </h1>
-                <div className={`w-16 sm:w-24 h-0.5 ${getSectionColors(0).accent} mx-auto mb-6 sm:mb-8`}></div>
-                <p className={`text-base sm:text-lg ${getSectionColors(0).subtext} max-w-full sm:max-w-2xl mx-auto leading-relaxed mb-8 sm:mb-12 px-4`}>
-                  A student-led initiative building the future of education
-                </p>
-                <div className={`${getSectionColors(0).subtext} text-sm`}>
-                  {/* Mobile: Swipe instruction, Desktop: Scroll instruction */}
-                  <span className="block sm:hidden">Swipe up to meet our founders</span>
-                  <span className="hidden sm:block">Scroll to meet our founders</span>
+          {/* Introduction Section */}
+          <div
+            className={`absolute inset-0 w-full h-full flex items-center justify-center ${getSectionColors(0).bg}`}
+            style={getSectionStyle(0)}
+            data-section="0"
+          >
+            <div className="container mx-auto px-4 sm:px-6 max-w-full pb-24 sm:pb-16 lg:pb-0">
+              <FadeIn>
+                <div className="text-center">
+                  <h1 className={`text-3xl sm:text-4xl md:text-6xl font-light ${getSectionColors(0).text} mb-4`}>
+                    Our Team
+                  </h1>
+                  <div className={`w-16 sm:w-24 h-0.5 ${getSectionColors(0).accent} mx-auto mb-6 sm:mb-8`}></div>
+                  <p className={`text-base sm:text-lg ${getSectionColors(0).subtext} max-w-full sm:max-w-2xl mx-auto leading-relaxed mb-8 sm:mb-12 px-4`}>
+                    A student-led initiative building the future of education
+                  </p>
+                  <div className={`${getSectionColors(0).subtext} text-sm`}>
+                    {/* Mobile: Swipe instruction, Desktop: Scroll instruction */}
+                    <span className="block sm:hidden">Swipe up to meet our founders</span>
+                    <span className="hidden sm:block">Scroll to meet our founders</span>
+                  </div>
+                  <div className="mt-4">
+                    {/* Mobile: Down arrow, Desktop: Right arrow */}
+                    <svg className={`w-5 h-5 sm:w-6 sm:h-6 mx-auto ${getSectionColors(0).subtext} animate-bounce sm:hidden`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                    </svg>
+                    <svg className={`w-5 h-5 sm:w-6 sm:h-6 mx-auto ${getSectionColors(0).subtext} animate-pulse hidden sm:block`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l7-7m0 0l-7-7m7 7H3" />
+                    </svg>
+                  </div>
                 </div>
-                <div className="mt-4">
-                  {/* Mobile: Down arrow, Desktop: Right arrow */}
-                  <svg className={`w-5 h-5 sm:w-6 sm:h-6 mx-auto ${getSectionColors(0).subtext} animate-bounce sm:hidden`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-                  </svg>
-                  <svg className={`w-5 h-5 sm:w-6 sm:h-6 mx-auto ${getSectionColors(0).subtext} animate-pulse hidden sm:block`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l7-7m0 0l-7-7m7 7H3" />
-                  </svg>
-                </div>
-              </div>
-            </FadeIn>
+              </FadeIn>
+            </div>
           </div>
-        </div>
 
-        {/* Individual Founder Sections */}
-        {founders.map((founder, index) => {
-          const sectionIndex = index + 1;
-          const colors = getSectionColors(sectionIndex);
-          const isLeftLayout = index % 2 === 0; // Alternate layout sides
+          {/* Rishal Melvani Section */}
+          <div
+            className="absolute inset-0 w-full h-full bg-black overflow-x-hidden"
+            style={getSectionStyle(1)}
+            data-section="1"
+          >
+            <div className="container mx-auto px-4 sm:px-6 h-full max-w-full">
+              <div className="flex flex-col lg:grid lg:grid-cols-2 gap-4 sm:gap-8 lg:gap-12 h-full items-center justify-center pb-24 sm:pb-16 lg:pb-0">
 
-          return (
-            <div
-              key={founder.id}
-              className={`absolute inset-0 w-full h-full ${colors.bg} overflow-x-hidden`}
-              style={getSectionStyle(sectionIndex)}
-              data-section={sectionIndex}
-            >
-              <div className="container mx-auto px-4 sm:px-6 h-full max-w-full">
-                <div className={`flex flex-col lg:grid lg:grid-cols-2 gap-8 lg:gap-12 h-full items-center justify-center ${isLeftLayout ? '' : 'lg:grid-flow-col-dense'}`}>
+                {/* Photo */}
+                <div className="flex items-center justify-center lg:order-1 flex-shrink-0">
+                  <div className="relative group">
+                    <div className="relative">
+                      <Image
+                        src="/rishal melvani.png"
+                        alt="Rishal Melvani - Founder"
+                        width={400}
+                        height={500}
+                        className="w-64 h-80 sm:w-80 sm:h-96 md:w-96 md:h-[28rem] object-cover object-top transition-all duration-700 hover:scale-[1.02]"
+                        sizes="(max-width: 640px) 256px, (max-width: 768px) 320px, (max-width: 1024px) 384px, 400px"
+                        quality={95}
+                        priority
+                        style={{
+                          maskImage: 'linear-gradient(to bottom, black 0%, black 85%, transparent 100%)',
+                          WebkitMaskImage: 'linear-gradient(to bottom, black 0%, black 85%, transparent 100%)',
+                          filter: 'sepia(0.3) saturate(0.7) brightness(0.9) contrast(1.1)'
+                        }}
+                      />
+                      <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    </div>
+                  </div>
+                </div>
 
-                  {/* Minimalistic Photo Integration */}
-                  <div className={`flex items-center justify-center ${isLeftLayout ? 'lg:order-1' : 'lg:order-2'} flex-shrink-0`}>
-                    <div className="relative group">
-                      {/* Minimalistic Photo Integration for Both Founders */}
-                      <div className="relative">
-                        <Image
-                          src={founder.name === "Ishaan Singh" ? "/ishaan singh.png" : "/rishal melvani.png"}
-                          alt={`${founder.name} - ${founder.title}`}
-                          width={400}
-                          height={500}
-                          className="w-64 h-80 sm:w-80 sm:h-96 md:w-96 md:h-[28rem] object-cover object-top transition-all duration-700 hover:scale-[1.02]"
-                          sizes="(max-width: 640px) 256px, (max-width: 768px) 320px, (max-width: 1024px) 384px, 400px"
-                          quality={95}
-                          priority
-                          style={{
-                            maskImage: 'linear-gradient(to bottom, black 0%, black 85%, transparent 100%)',
-                            WebkitMaskImage: 'linear-gradient(to bottom, black 0%, black 85%, transparent 100%)',
-                            filter: colors.bg === 'bg-black' 
-                              ? 'sepia(0.3) saturate(0.7) brightness(0.9) contrast(1.1)' 
-                              : 'sepia(0.2) saturate(0.8) brightness(1.1) contrast(1.05)'
-                          }}
-                        />
-                        {/* Subtle overlay for text contrast */}
-                        <div className={`absolute inset-0 ${colors.bg === 'bg-black' ? 'bg-black/10' : 'bg-white/10'} opacity-0 group-hover:opacity-100 transition-opacity duration-500`}></div>
-                      </div>
+                {/* Text */}
+                <div className="flex flex-col justify-center lg:order-2 text-center lg:text-left lg:pl-8 max-w-full">
+                  <div className="space-y-2 sm:space-y-3">
+                    <h2 className="text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-light text-white leading-tight tracking-tight overflow-hidden">
+                      <div className="block">Rishal</div>
+                      <div className="block">Melvani</div>
+                    </h2>
+                    <div className="w-24 sm:w-32 h-1 bg-white mx-auto lg:mx-0"></div>
+                    <div className="space-y-1 sm:space-y-2">
+                      <p className="text-xl sm:text-2xl md:text-3xl text-gray-300 font-light tracking-wide">
+                        Founder
+                      </p>
+                      <p className="text-base sm:text-lg text-gray-300 opacity-70 max-w-full sm:max-w-md mx-auto lg:mx-0 leading-relaxed px-4 lg:px-0">
+                        Visionary leader driving educational innovation through technology and collaboration.
+                      </p>
                     </div>
                   </div>
 
-                  {/* Impactful Text */}
-                  <div className={`flex flex-col justify-center ${isLeftLayout ? 'lg:order-2 text-center lg:text-left lg:pl-8' : 'lg:order-1 text-center lg:text-right lg:pr-8'} max-w-full`}>
-                    <div className="space-y-4 sm:space-y-6">
-                      {/* Name */}
-                      <h2 className={`text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-light ${colors.text} leading-none tracking-tight overflow-hidden`}>
-                        {founder.name.split(' ').map((word, i) => (
-                          <div key={i} className="block">
-                            {word}
-                          </div>
-                        ))}
-                      </h2>
-
-                      {/* Divider */}
-                      <div className={`w-24 sm:w-32 h-1 ${colors.accent} ${isLeftLayout ? 'mx-auto lg:mx-0' : 'mx-auto lg:ml-auto'}`}></div>
-
-                      {/* Title */}
-                      <p className={`text-xl sm:text-2xl md:text-3xl ${colors.subtext} font-light tracking-wide`}>
-                        {founder.title}
-                      </p>
-
-                      {/* Description */}
-                      <p className={`text-base sm:text-lg ${colors.subtext} opacity-70 max-w-full sm:max-w-md ${isLeftLayout ? 'mx-auto lg:mx-0' : 'mx-auto lg:ml-auto lg:text-right'} leading-relaxed px-4 lg:px-0`}>
-                        {index === 0
-                          ? "Visionary leader driving educational innovation through technology and collaboration."
-                          : "Strategic thinker focused on creating meaningful impact in the education sector."
-                        }
-                      </p>
+                  {/* Navigation hint */}
+                  <div className="mt-8 sm:mt-16 text-gray-300 text-sm opacity-60 text-center lg:text-left">
+                    <span className="block sm:hidden">Continue swiping</span>
+                    <span className="hidden sm:block">Continue scrolling</span>
+                    <div className="mt-2 flex justify-center lg:justify-start">
+                      <svg className="w-4 h-4 sm:w-5 sm:h-5 animate-bounce sm:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                      </svg>
+                      <svg className="w-4 h-4 sm:w-5 sm:h-5 animate-pulse hidden sm:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l7-7m0 0l-7-7m7 7H3" />
+                      </svg>
                     </div>
-
-                    {/* Navigation hint - only for first founder */}
-                    {index === 0 && (
-                      <div className={`mt-8 sm:mt-16 ${colors.subtext} text-sm opacity-60 ${isLeftLayout ? 'text-center lg:text-left' : 'text-center lg:text-right'}`}>
-                        <span className="block sm:hidden">Continue swiping</span>
-                        <span className="hidden sm:block">Continue scrolling</span>
-                        <div className={`mt-2 ${isLeftLayout ? 'flex justify-center lg:justify-start' : 'flex justify-center lg:justify-end'}`}>
-                          {/* Mobile: Down arrow, Desktop: Right arrow */}
-                          <svg className="w-4 h-4 sm:w-5 sm:h-5 animate-bounce sm:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-                          </svg>
-                          <svg className="w-4 h-4 sm:w-5 sm:h-5 animate-pulse hidden sm:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l7-7m0 0l-7-7m7 7H3" />
-                          </svg>
-                        </div>
-                      </div>
-                    )}
                   </div>
                 </div>
               </div>
             </div>
-          );
-        })}
+          </div>
+
+          {/* Ishaan Singh Section */}
+          <div
+            className="absolute inset-0 w-full h-full bg-black overflow-x-hidden"
+            style={getSectionStyle(2)}
+            data-section="2"
+          >
+            <div className="container mx-auto px-4 sm:px-6 h-full max-w-full">
+              <div className="flex flex-col lg:grid lg:grid-cols-2 gap-4 sm:gap-8 lg:gap-12 h-full items-center justify-center pb-24 sm:pb-16 lg:pb-0">
+
+                {/* Text */}
+                <div className="flex flex-col justify-center lg:order-1 text-center lg:text-right lg:pr-8 max-w-full">
+                  <div className="space-y-2 sm:space-y-3">
+                    <h2 className="text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-light text-white leading-tight tracking-tight">
+                      <div className="block">Ishaan</div>
+                      <div className="block">Singh</div>
+                    </h2>
+                    <div className="w-24 sm:w-32 h-1 bg-white mx-auto lg:mx-0 lg:ml-auto"></div>
+                    <div className="space-y-1 sm:space-y-2">
+                      <p className="text-xl sm:text-2xl md:text-3xl text-gray-300 font-light tracking-wide">
+                        Founder
+                      </p>
+                      <p className="text-base sm:text-lg text-gray-300 opacity-70 leading-relaxed px-4 lg:px-0">
+                        Strategic thinker focused on creating meaningful impact in the education sector.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Photo */}
+                <div className="flex items-center justify-center lg:order-2 flex-shrink-0">
+                  <div className="relative group">
+                    <div className="relative">
+                      <Image
+                        src="/ishaan singh.png"
+                        alt="Ishaan Singh - Founder"
+                        width={400}
+                        height={500}
+                        className="w-64 h-80 sm:w-80 sm:h-96 md:w-96 md:h-[28rem] object-cover object-top transition-all duration-700 hover:scale-[1.02]"
+                        sizes="(max-width: 640px) 256px, (max-width: 768px) 320px, (max-width: 1024px) 384px, 400px"
+                        quality={95}
+                        priority
+                        style={{
+                          maskImage: 'linear-gradient(to bottom, black 0%, black 85%, transparent 100%)',
+                          WebkitMaskImage: 'linear-gradient(to bottom, black 0%, black 85%, transparent 100%)',
+                          filter: 'sepia(0.3) saturate(0.7) brightness(0.9) contrast(1.1)'
+                        }}
+                      />
+                      <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
 
 
         </div>
@@ -360,7 +388,7 @@ export default function Team() {
             />
           ))}
         </div>
-        
+
         <Footer />
       </div>
     </PageWrapper>

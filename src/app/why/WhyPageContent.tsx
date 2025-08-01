@@ -113,8 +113,11 @@ const WhyPageContent = () => {
       }
 
       // Determine background color based on scroll position
-      // Start transitioning when we're 30% into the current section
-      if (transitionProgress > 0.3 && currentSectionIndex < totalSections - 1) {
+      // Use different transition thresholds for mobile vs desktop
+      const isMobile = window.innerWidth < 768;
+      const transitionThreshold = isMobile ? 0.7 : 0.3; // Mobile: 70%, Desktop: 30%
+      
+      if (transitionProgress > transitionThreshold && currentSectionIndex < totalSections - 1) {
         const nextColor = getSectionColor(nextSectionIndex);
         setBackgroundColor(nextColor);
       } else {
@@ -125,10 +128,23 @@ const WhyPageContent = () => {
 
     // Add scroll listener
     container.addEventListener('scroll', handleScroll, { passive: true });
+    
+    // Add debounced resize listener to handle orientation changes
+    let resizeTimeout: NodeJS.Timeout;
+    const handleResize = () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        handleScroll(); // Recalculate on resize
+      }, 100);
+    };
+    window.addEventListener('resize', handleResize, { passive: true });
+    
     handleScroll(); // Initial call
 
     return () => {
       container.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleResize);
+      clearTimeout(resizeTimeout);
     };
   }, [currentSection, totalSections]);
 

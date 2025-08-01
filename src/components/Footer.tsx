@@ -66,7 +66,7 @@ export default function Footer({ className = "" }: { className?: string }) {
                 </svg>
               </a>
               <a
-                href="#"
+                href="https://www.linkedin.com/company/education-for-our-futures/"
                 className="text-white hover:text-gray-300 transition-colors duration-200 focus:text-gray-300 focus:outline-none"
                 aria-label="LinkedIn"
               >

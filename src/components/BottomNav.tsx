@@ -2,20 +2,26 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Users, Mail, Info, Briefcase, Users as TeamIcon } from 'lucide-react';
+import { Home, Users, Mail, Info, Briefcase, Users as TeamIcon, UserPlus } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function BottomNav() {
   const pathname = usePathname();
   const [isAboutOpen, setIsAboutOpen] = useState(false);
+  const [isContactOpen, setIsContactOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const contactDropdownRef = useRef<HTMLDivElement>(null);
+  
 
-  // Check if current path is part of the about section
+
+  // Check if current path is part of the about or contact sections
   const isAboutSection = pathname === '/why' || 
                         pathname === '/board' || 
                         pathname === '/portfolio' || 
                         pathname === '/team';
+  
+  const isContactSection = pathname === '/contact' || pathname === '/join-us';
 
   // Navigation items with their respective paths and icons
   const navItems = [
@@ -37,18 +43,24 @@ export default function BottomNav() {
       ]
     },
     { 
-      href: '/contact', 
       label: 'Contact', 
       icon: Mail,
-      isLink: true
+      isLink: false,
+      subItems: [
+        { href: '/join-us', label: 'Join Us', icon: UserPlus },
+        { href: '/contact', label: 'Outreach', icon: Mail },
+      ]
     },
   ];
 
-  // Close dropdown when clicking outside
+  // Close dropdowns when clicking outside
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setIsAboutOpen(false);
+      }
+      if (contactDropdownRef.current && !contactDropdownRef.current.contains(event.target as Node)) {
+        setIsContactOpen(false);
       }
     }
 
@@ -58,9 +70,10 @@ export default function BottomNav() {
     };
   }, []);
 
-  // Close dropdown when route changes
+  // Close dropdowns when route changes
   useEffect(() => {
     setIsAboutOpen(false);
+    setIsContactOpen(false);
   }, [pathname]);
 
   // Animation variants for the dropdown
@@ -105,8 +118,8 @@ export default function BottomNav() {
   };
 
   return (
-    <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 w-full max-w-md px-6">
-      {/* Dropdown menu */}
+    <div className="fixed bottom-3 sm:bottom-6 left-1/2 -translate-x-1/2 z-50 w-full max-w-md px-6">
+      {/* About Dropdown menu */}
       <AnimatePresence>
         {isAboutOpen && (
           <motion.div 
@@ -149,28 +162,78 @@ export default function BottomNav() {
         )}
       </AnimatePresence>
 
+      {/* Contact Dropdown menu */}
+      <AnimatePresence>
+        {isContactOpen && (
+          <motion.div 
+            className="bg-white/95 backdrop-blur-xl rounded-2xl border border-border mb-3 overflow-hidden"
+            initial="hidden"
+            animate="visible"
+            exit="hidden"
+            variants={dropdownVariants}
+            transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
+          >
+            <div className="p-1.5">
+              <div className="flex flex-col space-y-1.5">
+                {navItems.find(item => item.label === 'Contact')?.subItems?.map((subItem) => {
+                  const isActive = pathname === subItem.href;
+                  const Icon = subItem.icon;
+                  
+                  return (
+                    <motion.div 
+                      key={subItem.href} 
+                      variants={itemVariants}
+                    >
+                      <Link
+                        href={subItem.href || '#'}
+                        className={`flex items-center justify-center p-2.5 rounded-xl transition-colors duration-200 ${
+                          isActive
+                            ? 'bg-black text-white'
+                            : 'text-black hover:bg-gray-100'
+                        }`}
+                        onClick={() => setIsContactOpen(false)}
+                      >
+                        <Icon className={`w-4 h-4 ${isActive ? 'text-white' : 'text-black'}`} />
+                        <span className="ml-3 text-sm font-medium">{subItem.label}</span>
+                      </Link>
+                    </motion.div>
+                  );
+                })}
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Main navigation bar */}
       <motion.nav 
-        className="bg-white/95 backdrop-blur-xl rounded-[2rem] border border-border p-1.5 mx-auto w-full"
+        className="bg-white/95 backdrop-blur-xl rounded-[2rem] border border-border p-1 sm:p-1.5 mx-auto w-full"
         aria-label="Main navigation"
         initial={{ y: 100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
       >
-        <div className="flex items-center justify-between px-2">
+        <div className="flex items-center justify-between px-1 sm:px-2">
           {navItems.map((item) => {
             // Skip rendering if it's a sub-item (they're rendered in the dropdown)
-            if (!item.isLink && item.label !== 'About') return null;
+            if (!item.isLink && item.label !== 'About' && item.label !== 'Contact') return null;
             
-            const isActive = item.isLink ? pathname === item.href : isAboutSection;
+            const isActive = item.isLink 
+              ? pathname === item.href 
+              : item.label === 'About' 
+                ? isAboutSection 
+                : isContactSection;
             const Icon = item.icon;
             
             if (item.label === 'About') {
               return (
                 <div key={item.label} ref={dropdownRef} className="relative">
                   <motion.button
-                    onClick={() => setIsAboutOpen(!isAboutOpen)}
-                    className={`flex items-center justify-center p-3 rounded-full transition-colors duration-200 ${
+                    onClick={() => {
+                      setIsAboutOpen(!isAboutOpen);
+                      if (isAboutOpen) setIsContactOpen(false);
+                    }}
+                    className={`flex items-center justify-center p-2 sm:p-3 rounded-full transition-colors duration-200 ${
                       isActive || isAboutOpen
                         ? 'text-white bg-black'
                         : 'text-black hover:bg-gray-100'
@@ -179,8 +242,41 @@ export default function BottomNav() {
                     aria-expanded={isAboutOpen}
                     title={item.label}
                   >
-                    <Icon className={`w-5 h-5 ${isActive || isAboutOpen ? 'text-white' : 'text-black'}`} />
+                    <Icon className={`w-4 h-4 sm:w-5 sm:h-5 ${isActive || isAboutOpen ? 'text-white' : 'text-black'}`} />
                     {isAboutOpen && (
+                      <motion.span 
+                        className="ml-2 text-sm font-medium text-white whitespace-nowrap"
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: -10 }}
+                      >
+                        Close
+                      </motion.span>
+                    )}
+                  </motion.button>
+                </div>
+              );
+            }
+            
+            if (item.label === 'Contact') {
+              return (
+                <div key={item.label} ref={contactDropdownRef} className="relative">
+                  <motion.button
+                    onClick={() => {
+                      setIsContactOpen(!isContactOpen);
+                      if (isContactOpen) setIsAboutOpen(false);
+                    }}
+                    className={`flex items-center justify-center p-2 sm:p-3 rounded-full transition-colors duration-200 ${
+                      isActive || isContactOpen
+                        ? 'text-white bg-black'
+                        : 'text-black hover:bg-gray-100'
+                    }`}
+                    aria-haspopup="true"
+                    aria-expanded={isContactOpen}
+                    title="Contact & Join Us"
+                  >
+                    <Icon className={`w-4 h-4 sm:w-5 sm:h-5 ${isActive || isContactOpen ? 'text-white' : 'text-black'}`} />
+                    {isContactOpen && (
                       <motion.span 
                         className="ml-2 text-sm font-medium text-white whitespace-nowrap"
                         initial={{ opacity: 0, x: -10 }}
@@ -199,7 +295,7 @@ export default function BottomNav() {
               <div key={item.href}>
                 <Link 
                   href={item.href || '#'}
-                  className={`flex items-center justify-center p-3 rounded-full transition-colors duration-200 ${
+                  className={`flex items-center justify-center p-2 sm:p-3 rounded-full transition-colors duration-200 ${
                     isActive
                       ? 'text-white bg-black' 
                       : 'text-black hover:bg-gray-100'
@@ -208,7 +304,7 @@ export default function BottomNav() {
                   aria-label={item.label}
                   title={item.label}
                 >
-                  <Icon className={`w-5 h-5 ${isActive ? 'text-white' : 'text-black'}`} />
+                  <Icon className={`w-4 h-4 sm:w-5 sm:h-5 ${isActive ? 'text-white' : 'text-black'}`} />
                 </Link>
               </div>
             );
