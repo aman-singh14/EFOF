@@ -238,8 +238,12 @@ export default function Team() {
                   <span className="hidden sm:block">Scroll to meet our founders</span>
                 </div>
                 <div className="mt-4">
-                  <svg className={`w-5 h-5 sm:w-6 sm:h-6 mx-auto ${getSectionColors(0).subtext} animate-bounce`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  {/* Mobile: Down arrow, Desktop: Right arrow */}
+                  <svg className={`w-5 h-5 sm:w-6 sm:h-6 mx-auto ${getSectionColors(0).subtext} animate-bounce sm:hidden`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                  </svg>
+                  <svg className={`w-5 h-5 sm:w-6 sm:h-6 mx-auto ${getSectionColors(0).subtext} animate-pulse hidden sm:block`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l7-7m0 0l-7-7m7 7H3" />
                   </svg>
                 </div>
               </div>
@@ -326,8 +330,12 @@ export default function Team() {
                         <span className="block sm:hidden">Continue swiping</span>
                         <span className="hidden sm:block">Continue scrolling</span>
                         <div className={`mt-2 ${isLeftLayout ? 'flex justify-center lg:justify-start' : 'flex justify-center lg:justify-end'}`}>
-                          <svg className="w-4 h-4 sm:w-5 sm:h-5 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          {/* Mobile: Down arrow, Desktop: Right arrow */}
+                          <svg className="w-4 h-4 sm:w-5 sm:h-5 animate-bounce sm:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                          </svg>
+                          <svg className="w-4 h-4 sm:w-5 sm:h-5 animate-pulse hidden sm:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l7-7m0 0l-7-7m7 7H3" />
                           </svg>
                         </div>
                       </div>

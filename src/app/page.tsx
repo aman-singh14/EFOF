@@ -20,7 +20,7 @@ function ProgressiveHeroVideo() {
     const timer = setTimeout(() => {
       setVideoLoaded(true);
     }, 1500); // After text animations finish (1.0s + buffer)
-    
+
     return () => clearTimeout(timer);
   }, []);
 
@@ -37,9 +37,8 @@ function ProgressiveHeroVideo() {
       muted
       loop
       playsInline
-      className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ease-out ${
-        videoReady ? 'opacity-100' : 'opacity-0'
-      }`}
+      className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ease-out ${videoReady ? 'opacity-100' : 'opacity-0'
+        }`}
       style={{ zIndex: 1 }} // Behind text content
       onCanPlay={handleVideoCanPlay}
       onLoadedData={handleVideoCanPlay}
@@ -208,12 +207,12 @@ function OptimizedHeroSection() {
     <section className="relative h-screen overflow-hidden bg-black">
       {/* Simple black background */}
       <div className="absolute inset-0 bg-black" />
-      
+
       {/* Progressive video enhancement - loads after text animations */}
       <ProgressiveHeroVideo />
-      
+
       <div className="absolute inset-0 bg-black/30" style={{ zIndex: 5 }} />
-      
+
       <div className="relative h-screen flex flex-col justify-between mobile-container mobile-padding-responsive" style={{ zIndex: 10 }}>
         <div className="flex-1 flex items-start justify-start pt-16 sm:pt-20 md:pt-32">
           <h1 className="mobile-text-xl font-bold text-white tracking-tight max-w-full">
@@ -350,16 +349,16 @@ export default function Home() {
     <PageWrapper>
       <div className="relative overflow-x-hidden max-w-full">
         {/* Dynamic Background that transitions with scroll */}
-        <div 
+        <div
           className="fixed inset-0 z-0 dynamic-background"
           style={{ backgroundColor: backgroundColor }}
         />
-        
+
         {/* Fixed Navigation - Dynamic logo based on current section */}
         <div className="fixed top-4 left-4 md:top-6 md:left-6 z-50 hidden md:block">
           <Link href="/" aria-label="Home">
-            <Logo 
-              variant={currentSection === 1 || currentSection === 3 ? "black" : "white"} 
+            <Logo
+              variant={currentSection === 1 || currentSection === 3 ? "black" : "white"}
               size="md"
               priority={true}
             />
@@ -367,8 +366,8 @@ export default function Home() {
         </div>
         <div className="sticky top-0 left-0 z-50 block md:hidden bg-transparent pt-2 pl-2">
           <Link href="/" aria-label="Home">
-            <Logo 
-              variant={currentSection === 1 || currentSection === 3 ? "black" : "white"} 
+            <Logo
+              variant={currentSection === 1 || currentSection === 3 ? "black" : "white"}
               size="sm"
               priority={true}
             />
@@ -435,10 +434,10 @@ export default function Home() {
                     <br />
                     <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-white/90 leading-relaxed mb-6 sm:mb-8 font-light">
                       The education system was built from the perspective of outsiders looking in, but it's time that changes.
-                    </p> 
+                    </p>
                     <br />
                     <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-white/90 leading-relaxed mb-6 sm:mb-8 font-light">
-                      K-12 is expected to undergo its most significant transformation of the past century. We are placing students at the forefront of this revolution.
+                      K-12 education is poised for its most significant transformation in a century. We're putting students at the center of this revolution.
                     </p>
                   </div>
                 </ScrollAnimation>
@@ -496,21 +495,20 @@ export default function Home() {
                       { name: "Ishaan Singh", role: "Founder", image: "/ishaan singh.png" }
                     ].map((member, index) => (
                       <div key={index} className="text-center group mb-8 sm:mb-0">
-                        <div 
-                          className={`w-32 h-32 sm:w-36 sm:h-36 md:w-48 md:h-48 lg:w-56 lg:h-56 mx-auto mb-6 sm:mb-8 overflow-hidden rounded-full bg-white/10 backdrop-blur-sm border border-white/20 group-hover:bg-white/20 transition-all duration-700 shadow-lg transform ${
-                            animateStates[index] ? 'animate-float-in' : 'opacity-0 translate-y-8 scale-95'
-                          }`}
+                        <div
+                          className={`w-32 h-32 sm:w-36 sm:h-36 md:w-48 md:h-48 lg:w-56 lg:h-56 mx-auto mb-6 sm:mb-8 overflow-hidden rounded-full bg-white/10 backdrop-blur-sm border border-white/20 group-hover:bg-white/20 transition-all duration-700 shadow-lg transform ${animateStates[index] ? 'animate-float-in' : 'opacity-0 translate-y-8 scale-95'
+                            }`}
                         >
                           <div className="w-full h-full relative">
-                            <Image 
-                              src={member.image} 
-                              alt={member.name} 
+                            <Image
+                              src={member.image}
+                              alt={member.name}
                               fill
                               sizes="(max-width: 640px) 128px, (max-width: 768px) 144px, (max-width: 1024px) 192px, 224px"
                               className="object-cover"
                               quality={95}
                               priority
-                              style={{ 
+                              style={{
                                 objectPosition: member.name === "Rishal Melvani" ? "center 10%" : "center center"
                               }}
                             />
