@@ -207,6 +207,7 @@ export function useAnimationFrame(callback: (deltaTime: number) => void, depende
         cancelAnimationFrame(requestRef.current);
       }
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, dependencies);
 }
 

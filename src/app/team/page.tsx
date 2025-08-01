@@ -3,7 +3,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import { FadeIn } from "@/components/FadeIn";
+import Footer from "@/components/Footer";
+import PageWrapper from "@/components/page-wrapper";
+import Logo from "@/components/Logo";
 import { useEffect, useState } from "react";
+
 
 export default function Team() {
   const [currentSection, setCurrentSection] = useState(0);
@@ -19,7 +23,10 @@ export default function Team() {
   const totalSections = 1 + founders.length;
 
   useEffect(() => {
-    const handleScroll = (e: WheelEvent) => {
+    let touchStartY = 0;
+    let touchEndY = 0;
+
+    const handleWheel = (e: WheelEvent) => {
       e.preventDefault();
 
       if (isTransitioning) return;
@@ -45,12 +52,51 @@ export default function Team() {
       }
     };
 
-    // Prevent default scrolling and add custom scroll handler
-    document.addEventListener('wheel', handleScroll, { passive: false });
+    const handleTouchStart = (e: TouchEvent) => {
+      touchStartY = e.touches[0].clientY;
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      e.preventDefault();
+    };
+
+    const handleTouchEnd = (e: TouchEvent) => {
+      if (isTransitioning) return;
+
+      touchEndY = e.changedTouches[0].clientY;
+      const deltaY = touchStartY - touchEndY;
+      const threshold = 50;
+
+      if (Math.abs(deltaY) > threshold) {
+        setIsTransitioning(true);
+
+        if (deltaY > 0 && currentSection < totalSections - 1) {
+          // Swipe up - go to next section
+          setPreviousSection(currentSection);
+          setCurrentSection(prev => prev + 1);
+        } else if (deltaY < 0 && currentSection > 0) {
+          // Swipe down - go to previous section
+          setPreviousSection(currentSection);
+          setCurrentSection(prev => prev - 1);
+        }
+
+        // Reset transition lock after animation completes
+        setTimeout(() => setIsTransitioning(false), 1200);
+      }
+    };
+
+    // Add event listeners for both desktop and mobile
+    document.addEventListener('wheel', handleWheel, { passive: false });
+    document.addEventListener('touchstart', handleTouchStart, { passive: false });
+    document.addEventListener('touchmove', handleTouchMove, { passive: false });
+    document.addEventListener('touchend', handleTouchEnd, { passive: false });
     document.body.style.overflow = 'hidden';
 
     return () => {
-      document.removeEventListener('wheel', handleScroll);
+      document.removeEventListener('wheel', handleWheel);
+      document.removeEventListener('touchstart', handleTouchStart);
+      document.removeEventListener('touchmove', handleTouchMove);
+      document.removeEventListener('touchend', handleTouchEnd);
       document.body.style.overflow = 'auto';
     };
   }, [currentSection, isTransitioning, totalSections]);
@@ -129,94 +175,70 @@ export default function Team() {
     }
   };
 
-  // Get section colors based on index
+  // Get section colors based on index - ensuring all sections start with black
   const getSectionColors = (index: number) => {
-    if (index === 0) {
-      // Intro section - black
-      return {
-        bg: 'bg-black',
-        text: 'text-white',
-        subtext: 'text-gray-300',
-        accent: 'bg-white',
-        avatar: 'bg-gray-800',
-        avatarHover: 'hover:bg-gray-700'
-      };
-    } else {
-      // Alternate colors for founders
-      const founderIndex = index - 1;
-      if (founderIndex % 2 === 0) {
-        // White background for first founder
-        return {
-          bg: 'bg-white',
-          text: 'text-black',
-          subtext: 'text-gray-600',
-          accent: 'bg-black',
-          avatar: 'bg-gray-100',
-          avatarHover: 'hover:bg-gray-200'
-        };
-      } else {
-        // Black background for second founder
-        return {
-          bg: 'bg-black',
-          text: 'text-white',
-          subtext: 'text-gray-300',
-          accent: 'bg-white',
-          avatar: 'bg-gray-800',
-          avatarHover: 'hover:bg-gray-700'
-        };
-      }
-    }
+    // All sections should have black background to match the design
+    return {
+      bg: 'bg-black',
+      text: 'text-white',
+      subtext: 'text-gray-300',
+      accent: 'bg-white',
+      avatar: 'bg-gray-800',
+      avatarHover: 'hover:bg-gray-700'
+    };
   };
 
   return (
-    <>
-      {/* Top-left logo - Dynamic based on current section */}
-      <div className="fixed top-6 left-6 z-50 hidden md:block">
-        <Link href="/" aria-label="Home">
-          <Image 
-            src={currentSection === 1 ? "/EFOF Logo.png" : "/EFOF Logo 2.png"} 
-            alt="Education for Our Future Logo" 
-            width={180} 
-            height={60} 
-            className="h-16 w-auto hover:opacity-90 transition-opacity duration-200" 
-          />
-        </Link>
-      </div>
-      <div className="sticky top-0 left-0 z-50 block md:hidden bg-transparent pt-4 pl-4">
-        <Link href="/" aria-label="Home">
-          <Image 
-            src={currentSection === 1 ? "/EFOF Logo.png" : "/EFOF Logo 2.png"} 
-            alt="Education for Our Future Logo" 
-            width={140} 
-            height={48} 
-            className="h-14 w-auto hover:opacity-90 transition-opacity duration-200" 
-          />
-        </Link>
-      </div>
+    <PageWrapper>
+      <div className="relative overflow-x-hidden max-w-full">
+        {/* Fixed Background */}
+        <div className="fixed inset-0 z-0 bg-black" />
+        
+        {/* Fixed Navigation */}
+        <div className="fixed top-4 left-4 md:top-6 md:left-6 z-50 hidden md:block">
+          <Link href="/" aria-label="Home">
+            <Logo 
+              variant="white" 
+              size="md"
+              priority
+            />
+          </Link>
+        </div>
+        <div className="sticky top-0 left-0 z-50 block md:hidden bg-transparent pt-2 pl-2">
+          <Link href="/" aria-label="Home">
+            <Logo 
+              variant="white" 
+              size="sm"
+              priority
+            />
+          </Link>
+        </div>
 
-      {/* Container for layered sections */}
-      <div className="h-screen overflow-hidden relative">
+        {/* Container for layered sections */}
+        <div className="relative z-10 h-screen overflow-hidden max-w-full">
         {/* Introduction Section */}
         <div
           className={`absolute inset-0 w-full h-full flex items-center justify-center ${getSectionColors(0).bg}`}
           style={getSectionStyle(0)}
           data-section="0"
         >
-          <div className="container mx-auto px-6">
+          <div className="container mx-auto px-4 sm:px-6 max-w-full">
             <FadeIn>
               <div className="text-center">
-                <h1 className={`text-4xl md:text-6xl font-light ${getSectionColors(0).text} mb-4`}>
+                <h1 className={`text-3xl sm:text-4xl md:text-6xl font-light ${getSectionColors(0).text} mb-4`}>
                   Our Team
                 </h1>
-                <div className={`w-24 h-0.5 ${getSectionColors(0).accent} mx-auto mb-8`}></div>
-                <p className={`text-lg ${getSectionColors(0).subtext} max-w-2xl mx-auto leading-relaxed mb-12`}>
+                <div className={`w-16 sm:w-24 h-0.5 ${getSectionColors(0).accent} mx-auto mb-6 sm:mb-8`}></div>
+                <p className={`text-base sm:text-lg ${getSectionColors(0).subtext} max-w-full sm:max-w-2xl mx-auto leading-relaxed mb-8 sm:mb-12 px-4`}>
                   A student-led initiative building the future of education
                 </p>
                 <div className={`${getSectionColors(0).subtext} text-sm`}>
-                  Scroll to meet our founders
+                  {/* Mobile: Swipe instruction, Desktop: Scroll instruction */}
+                  <span className="block sm:hidden">Swipe up to meet our founders</span>
+                  <span className="hidden sm:block">Scroll to meet our founders</span>
                 </div>
                 <div className="mt-4">
-                  <svg className={`w-6 h-6 mx-auto ${getSectionColors(0).subtext} animate-bounce`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className={`w-5 h-5 sm:w-6 sm:h-6 mx-auto ${getSectionColors(0).subtext} animate-bounce`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
                   </svg>
                 </div>
@@ -234,15 +256,15 @@ export default function Team() {
           return (
             <div
               key={founder.id}
-              className={`absolute inset-0 w-full h-full ${colors.bg}`}
+              className={`absolute inset-0 w-full h-full ${colors.bg} overflow-x-hidden`}
               style={getSectionStyle(sectionIndex)}
               data-section={sectionIndex}
             >
-              <div className="container mx-auto px-6 h-full">
-                <div className={`grid grid-cols-1 lg:grid-cols-2 gap-12 h-full items-center ${isLeftLayout ? '' : 'lg:grid-flow-col-dense'}`}>
+              <div className="container mx-auto px-4 sm:px-6 h-full max-w-full">
+                <div className={`flex flex-col lg:grid lg:grid-cols-2 gap-8 lg:gap-12 h-full items-center justify-center ${isLeftLayout ? '' : 'lg:grid-flow-col-dense'}`}>
 
                   {/* Minimalistic Photo Integration */}
-                  <div className={`flex items-center justify-center ${isLeftLayout ? 'lg:order-1' : 'lg:order-2'}`}>
+                  <div className={`flex items-center justify-center ${isLeftLayout ? 'lg:order-1' : 'lg:order-2'} flex-shrink-0`}>
                     <div className="relative group">
                       {/* Minimalistic Photo Integration for Both Founders */}
                       <div className="relative">
@@ -251,7 +273,10 @@ export default function Team() {
                           alt={`${founder.name} - ${founder.title}`}
                           width={400}
                           height={500}
-                          className="w-80 h-96 md:w-96 md:h-[28rem] object-cover object-top transition-all duration-700 hover:scale-[1.02]"
+                          className="w-64 h-80 sm:w-80 sm:h-96 md:w-96 md:h-[28rem] object-cover object-top transition-all duration-700 hover:scale-[1.02]"
+                          sizes="(max-width: 640px) 256px, (max-width: 768px) 320px, (max-width: 1024px) 384px, 400px"
+                          quality={95}
+                          priority
                           style={{
                             maskImage: 'linear-gradient(to bottom, black 0%, black 85%, transparent 100%)',
                             WebkitMaskImage: 'linear-gradient(to bottom, black 0%, black 85%, transparent 100%)',
@@ -267,10 +292,10 @@ export default function Team() {
                   </div>
 
                   {/* Impactful Text */}
-                  <div className={`flex flex-col justify-center ${isLeftLayout ? 'lg:order-2 text-left lg:pl-8' : 'lg:order-1 text-right lg:pr-8'}`}>
-                    <div className="space-y-6">
+                  <div className={`flex flex-col justify-center ${isLeftLayout ? 'lg:order-2 text-center lg:text-left lg:pl-8' : 'lg:order-1 text-center lg:text-right lg:pr-8'} max-w-full`}>
+                    <div className="space-y-4 sm:space-y-6">
                       {/* Name */}
-                      <h2 className={`text-5xl md:text-7xl lg:text-8xl font-light ${colors.text} leading-none tracking-tight`}>
+                      <h2 className={`text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-light ${colors.text} leading-none tracking-tight overflow-hidden`}>
                         {founder.name.split(' ').map((word, i) => (
                           <div key={i} className="block">
                             {word}
@@ -279,15 +304,15 @@ export default function Team() {
                       </h2>
 
                       {/* Divider */}
-                      <div className={`w-32 h-1 ${colors.accent} ${isLeftLayout ? '' : 'ml-auto'}`}></div>
+                      <div className={`w-24 sm:w-32 h-1 ${colors.accent} ${isLeftLayout ? 'mx-auto lg:mx-0' : 'mx-auto lg:ml-auto'}`}></div>
 
                       {/* Title */}
-                      <p className={`text-2xl md:text-3xl ${colors.subtext} font-light tracking-wide`}>
+                      <p className={`text-xl sm:text-2xl md:text-3xl ${colors.subtext} font-light tracking-wide`}>
                         {founder.title}
                       </p>
 
                       {/* Description */}
-                      <p className={`text-lg ${colors.subtext} opacity-70 max-w-md ${isLeftLayout ? '' : 'ml-auto text-right'} leading-relaxed`}>
+                      <p className={`text-base sm:text-lg ${colors.subtext} opacity-70 max-w-full sm:max-w-md ${isLeftLayout ? 'mx-auto lg:mx-0' : 'mx-auto lg:ml-auto lg:text-right'} leading-relaxed px-4 lg:px-0`}>
                         {index === 0
                           ? "Visionary leader driving educational innovation through technology and collaboration."
                           : "Strategic thinker focused on creating meaningful impact in the education sector."
@@ -297,10 +322,11 @@ export default function Team() {
 
                     {/* Navigation hint - only for first founder */}
                     {index === 0 && (
-                      <div className={`mt-16 ${colors.subtext} text-sm opacity-60 ${isLeftLayout ? '' : 'text-right'}`}>
-                        Continue scrolling
-                        <div className={`mt-2 ${isLeftLayout ? '' : 'flex justify-end'}`}>
-                          <svg className="w-5 h-5 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <div className={`mt-8 sm:mt-16 ${colors.subtext} text-sm opacity-60 ${isLeftLayout ? 'text-center lg:text-left' : 'text-center lg:text-right'}`}>
+                        <span className="block sm:hidden">Continue swiping</span>
+                        <span className="hidden sm:block">Continue scrolling</span>
+                        <div className={`mt-2 ${isLeftLayout ? 'flex justify-center lg:justify-start' : 'flex justify-center lg:justify-end'}`}>
+                          <svg className="w-4 h-4 sm:w-5 sm:h-5 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
                           </svg>
                         </div>
@@ -314,20 +340,21 @@ export default function Team() {
         })}
 
 
+        </div>
+
+        {/* Section indicators */}
+        <div className="fixed bottom-6 sm:bottom-8 left-1/2 transform -translate-x-1/2 z-50 flex space-x-2">
+          {Array.from({ length: totalSections }).map((_, index) => (
+            <div
+              key={index}
+              className={`w-2 h-2 rounded-full transition-all duration-300 ${currentSection === index ? 'bg-white scale-125' : 'bg-gray-500'
+                }`}
+            />
+          ))}
+        </div>
+        
+        <Footer />
       </div>
-
-      {/* Section indicators */}
-      <div className="fixed bottom-8 left-1/2 transform -translate-x-1/2 z-50 flex space-x-2">
-        {Array.from({ length: totalSections }).map((_, index) => (
-          <div
-            key={index}
-            className={`w-2 h-2 rounded-full transition-all duration-300 ${currentSection === index ? 'bg-white scale-125' : 'bg-gray-500'
-              }`}
-          />
-        ))}
-      </div>
-
-
-    </>
+    </PageWrapper>
   );
 }

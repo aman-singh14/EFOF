@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useCallback, useMemo } from 'react';
 import { motion, useAnimation, AnimatePresence } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { 
@@ -108,21 +108,21 @@ export default function SectionAnimationController({
   const control10 = useAnimation();
   
   // Store all controls in an array for easy access
-  const controlsArray = [
+  const controlsArray = useMemo(() => [
     control1, control2, control3, control4, control5,
     control6, control7, control8, control9, control10
-  ];
+  ], [control1, control2, control3, control4, control5, control6, control7, control8, control9, control10]);
   
   // Track which controls are already used
   const usedControlsMap = useRef(new Map<string, number>());
   const nextControlIndex = useRef(0);
   
   // Get the next available control
-  const getNextControl = () => {
+  const getNextControl = useCallback(() => {
     const index = nextControlIndex.current % controlsArray.length;
     nextControlIndex.current += 1;
     return controlsArray[index];
-  };
+  }, [controlsArray]);
   
   // Initialize animated elements
   useEffect(() => {
@@ -186,7 +186,7 @@ export default function SectionAnimationController({
 
     setAnimatedElements(elements);
     setIsInitialized(true);
-  }, [animationConfig, customAnimations, isInitialized, performanceSettings]);
+  }, [animationConfig, customAnimations, isInitialized, performanceSettings, getNextControl]);
 
   // Handle entrance animations
   useEffect(() => {
@@ -249,7 +249,7 @@ export default function SectionAnimationController({
         }
       });
     };
-  }, [inView, animatedElements, choreographyType, sectionId, onAnimationStart, onAnimationComplete]);
+  }, [inView, animatedElements, choreographyType, sectionId, onAnimationStart, onAnimationComplete, performanceSettings.staggerLimit]);
 
   // Handle exit animations
   useEffect(() => {

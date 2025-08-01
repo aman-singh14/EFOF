@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect } from "react";
-
 export default function ClientBody({
   children,
 }: {
@@ -10,8 +9,12 @@ export default function ClientBody({
   // Remove any extension-added classes during hydration
   useEffect(() => {
     // This runs only on the client after hydration
-    document.body.className = "antialiased";
+    document.body.className = "antialiased font-serif";
   }, []);
 
-  return <div className="antialiased">{children}</div>;
+  return (
+    <div className="antialiased">
+      {children}
+    </div>
+  );
 }

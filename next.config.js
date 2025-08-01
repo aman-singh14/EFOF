@@ -1,8 +1,19 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     allowedDevOrigins: ["*.preview.same-app.com"],
+    
+    // Optimize CSS loading (using stable features only)
+    experimental: {
+      cssChunking: 'strict',
+    },
+    
+    // Compiler optimizations
+    compiler: {
+      removeConsole: process.env.NODE_ENV === 'production',
+    },
+    
     images: {
-      unoptimized: true,
+      formats: ['image/webp', 'image/avif'],
       domains: [
         "source.unsplash.com",
         "images.unsplash.com",
@@ -31,6 +42,21 @@ const nextConfig = {
           pathname: "/**",
         },
       ],
+    },
+    
+    // Headers for better caching
+    async headers() {
+      return [
+        {
+          source: '/fonts/(.*)',
+          headers: [
+            {
+              key: 'Cache-Control',
+              value: 'public, max-age=31536000, immutable',
+            },
+          ],
+        },
+      ];
     },
   };
   

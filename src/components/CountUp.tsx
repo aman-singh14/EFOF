@@ -48,13 +48,14 @@ export const CountUp = ({
       { threshold: 0.1 }
     );
 
-    if (countRef.current) {
-      observerRef.current.observe(countRef.current);
+    const currentElement = countRef.current;
+    if (currentElement) {
+      observerRef.current.observe(currentElement);
     }
 
     return () => {
-      if (countRef.current && observerRef.current) {
-        observerRef.current.unobserve(countRef.current);
+      if (currentElement && observerRef.current) {
+        observerRef.current.unobserve(currentElement);
       }
     };
   }, []);

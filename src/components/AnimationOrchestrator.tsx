@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useMemo } from 'react';
 import { motion, useAnimation, Variants } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 
@@ -124,10 +124,10 @@ export default function AnimationOrchestrator({
   const control10 = useAnimation();
   
   // Store all controls in an array for easy access
-  const controlsArray = [
+  const controlsArray = useMemo(() => [
     control1, control2, control3, control4, control5,
     control6, control7, control8, control9, control10
-  ];
+  ], [control1, control2, control3, control4, control5, control6, control7, control8, control9, control10]);
   
   // Track which controls are already used
   const nextControlIndex = useRef(0);
@@ -162,7 +162,7 @@ export default function AnimationOrchestrator({
 
     setAnimatedElements(elements);
     setIsInitialized(true);
-  }, [animations, isInitialized]);
+  }, [animations, isInitialized, controlsArray]);
 
   // Handle entrance animations
   useEffect(() => {

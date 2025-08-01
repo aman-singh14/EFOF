@@ -8,7 +8,10 @@
     "start": "next start",
     "lint": "bunx tsc --noEmit && next lint",
     "format": "bunx biome format --write",
-    "test": "vitest"
+    "test": "vitest",
+    "optimize-images": "node scripts/optimize-images.js",
+    "optimize-css": "node scripts/optimize-css.js",
+    "analyze": "npm run optimize-css && npm run optimize-images"
   },
   "dependencies": {
     "@types/nodemailer": "^6.4.17",
@@ -38,10 +41,13 @@
     "@types/react": "^18.3.22",
     "@types/react-dom": "^18.3.7",
     "@vitest/ui": "^3.2.4",
+    "autoprefixer": "^10.4.21",
+    "cssnano": "^7.1.0",
     "eslint": "^9.27.0",
     "eslint-config-next": "15.1.7",
     "jsdom": "^26.1.0",
     "postcss": "^8.5.3",
+    "sharp": "^0.34.3",
     "tailwindcss": "^3.4.17",
     "typescript": "^5.8.3",
     "vitest": "^3.2.4"

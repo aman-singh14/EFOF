@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useEffect, useState, useRef } from "react";
 import ScrollAnimation from "@/components/ScrollAnimation";
 import PageWrapper from "@/components/page-wrapper";
+import Logo from "@/components/Logo";
 
 // Questions data - each gets its own section
 const studentQuestions = [
@@ -133,7 +134,7 @@ const WhyPageContent = () => {
 
   return (
     <PageWrapper>
-      <div className="relative">
+      <div className="relative overflow-x-hidden max-w-full">
         {/* Dynamic Background that transitions with scroll */}
         <div 
           className="fixed inset-0 z-0 dynamic-background"
@@ -141,11 +142,11 @@ const WhyPageContent = () => {
         />
         
         {/* Fixed Navigation - Dynamic logo based on current section */}
-        <div className="fixed top-6 left-6 z-50 hidden md:block">
+        <div className="fixed top-4 left-4 md:top-6 md:left-6 z-50 hidden md:block">
           <Link href="/" aria-label="Home">
-            <Image 
-              src={
-                // Determine which logo to use based on section background
+            <Logo 
+              variant={
+                // Determine which logo variant to use based on section background
                 // Hero (0) - white bg - black logo
                 // Questions (1,2,3) - alternating bg - alternating logo
                 // Context (4) - white bg - black logo
@@ -158,49 +159,45 @@ const WhyPageContent = () => {
                 currentSection === 6 || 
                 currentSection === 8 || 
                 currentSection === 10 
-                  ? "/EFOF Logo.png" 
-                  : "/EFOF Logo 2.png"
+                  ? "black" 
+                  : "white"
               } 
-              alt="Education for Our Future Logo" 
-              width={180} 
-              height={60} 
-              className="h-16 w-auto hover:opacity-90 transition-opacity duration-200" 
+              size="md"
+              priority
             />
           </Link>
         </div>
-        <div className="sticky top-0 left-0 z-50 block md:hidden bg-transparent pt-4 pl-4">
+        <div className="sticky top-0 left-0 z-50 block md:hidden bg-transparent pt-2 pl-2">
           <Link href="/" aria-label="Home">
-            <Image 
-              src={
+            <Logo 
+              variant={
                 currentSection === 0 || 
                 currentSection === 2 || 
                 currentSection === 4 || 
                 currentSection === 6 || 
                 currentSection === 8 || 
                 currentSection === 10 
-                  ? "/EFOF Logo.png" 
-                  : "/EFOF Logo 2.png"
+                  ? "black" 
+                  : "white"
               } 
-              alt="Education for Our Future Logo" 
-              width={140} 
-              height={48} 
-              className="h-14 w-auto hover:opacity-90 transition-opacity duration-200" 
+              size="sm"
+              priority
             />
           </Link>
         </div>
 
         <div 
           ref={scrollContainerRef}
-          className={`relative z-10 h-screen overflow-y-auto natural-scroll-container scroll-optimized transition-opacity duration-1000 ${pageLoaded ? 'opacity-100' : 'opacity-0'}`}
+          className={`relative z-10 h-screen overflow-y-auto overflow-x-hidden natural-scroll-container scroll-optimized max-w-full transition-opacity duration-1000 ${pageLoaded ? 'opacity-100' : 'opacity-0'}`}
         >
           {/* Hero Section - Title */}
           <section className="relative h-screen overflow-hidden">
-            <div className="h-screen flex flex-col justify-center items-center p-8 md:p-16 relative z-10">
+            <div className="h-screen flex flex-col justify-center items-center mobile-container mobile-padding-responsive relative z-10">
               <ScrollAnimation direction="up" delay={0.2} once={false}>
-                <h1 className="text-6xl md:text-8xl lg:text-9xl font-bold text-black leading-[0.8] tracking-tight text-center mb-8">
+                <h1 className="mobile-text-xl font-bold text-black tracking-tight text-center mb-6 sm:mb-8">
                   Why?
                 </h1>
-                <p className="text-xl md:text-2xl text-black/70 text-center max-w-2xl">
+                <p className="text-lg sm:text-xl md:text-2xl text-black/70 text-center max-w-full sm:max-w-2xl">
                   These are questions we're tired of asking
                 </p>
               </ScrollAnimation>
@@ -214,18 +211,18 @@ const WhyPageContent = () => {
             // Create proper staircase positioning - each question in different vertical third
             const getStaircasePosition = () => {
               switch(index) {
-                case 0: return 'items-start justify-start pt-16 pl-8 md:pl-16'; // Top-left (top third)
+                case 0: return 'items-start justify-center sm:justify-start pt-12 sm:pt-16'; // Top-center on mobile, top-left on desktop
                 case 1: return 'items-center justify-center'; // Center (middle third)
-                case 2: return 'items-end justify-end pb-16 pr-8 md:pr-16'; // Bottom-right (bottom third)
+                case 2: return 'items-end justify-center sm:justify-end pb-12 sm:pb-16'; // Bottom-center on mobile, bottom-right on desktop
                 default: return 'items-center justify-center';
               }
             };
 
             const getTextAlignment = () => {
               switch(index) {
-                case 0: return 'text-left';
+                case 0: return 'text-center sm:text-left';
                 case 1: return 'text-center';
-                case 2: return 'text-right';
+                case 2: return 'text-center sm:text-right';
                 default: return 'text-center';
               }
             };
@@ -244,18 +241,18 @@ const WhyPageContent = () => {
                 </div>
 
                 {/* Staircase layout - each question positioned differently */}
-                <div className={`h-screen flex ${getStaircasePosition()} relative z-10`}>
+                <div className={`h-screen flex ${getStaircasePosition()} relative z-10 mobile-container`}>
                   <ScrollAnimation direction="up" delay={0.3} once={false}>
-                    <div className={`max-w-4xl ${getTextAlignment()}`}>
+                    <div className={`max-w-full sm:max-w-4xl ${getTextAlignment()} px-4 sm:px-0`}>
                       {/* Main question text with staircase typography */}
-                      <h2 className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-light leading-relaxed mb-8">
+                      <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-light leading-relaxed mb-6 sm:mb-8 overflow-hidden">
                         <span className="inline-block transform transition-all duration-700 hover:scale-105">
                           {questionData.question}
                         </span>
                       </h2>
 
                       {/* Subtle underline animation */}
-                      <div className={`w-0 h-0.5 ${isBlackBg ? 'bg-white' : 'bg-black'} transition-all duration-1000 delay-500 ${index === 0 ? '' : index === 1 ? 'mx-auto' : 'ml-auto'}`}
+                      <div className={`w-0 h-0.5 ${isBlackBg ? 'bg-white' : 'bg-black'} transition-all duration-1000 delay-500 ${index === 0 ? 'mx-auto sm:mx-0' : index === 1 ? 'mx-auto' : 'mx-auto sm:ml-auto'}`}
                            style={{ width: currentSection === (index + 1) ? '120px' : '0px' }} />
 
 
@@ -274,12 +271,12 @@ const WhyPageContent = () => {
 
           {/* Context Section - Full screen layout */}
           <section className="relative h-screen text-black">
-            <div className="h-screen flex flex-col justify-between p-8 md:p-16 relative z-10">
+            <div className="h-screen flex flex-col justify-between mobile-container mobile-padding-responsive relative z-10">
               {/* Top right - Problem statement */}
-              <div className="flex items-start justify-end pt-16">
+              <div className="flex items-start justify-center sm:justify-end pt-12 sm:pt-16">
                 <ScrollAnimation direction="left" delay={0.2} once={false}>
-                  <div className="max-w-2xl text-right">
-                    <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold text-black leading-[0.95] tracking-tight">
+                  <div className="max-w-full sm:max-w-2xl text-center sm:text-right">
+                    <h2 className="mobile-text-large font-bold text-black tracking-tight">
                       The System<br />
                       <span className="text-black/70">Hasn't</span><br />
                       Changed
@@ -289,13 +286,13 @@ const WhyPageContent = () => {
               </div>
               
               {/* Center left - Main statement */}
-              <div className="flex-1 flex items-center justify-start">
+              <div className="flex-1 flex items-center justify-center sm:justify-start">
                 <ScrollAnimation direction="right" delay={0.6} once={false}>
-                  <div className="max-w-3xl">
-                    <p className="text-2xl md:text-3xl lg:text-4xl text-black/90 leading-relaxed font-light mb-8">
+                  <div className="max-w-full sm:max-w-3xl text-center sm:text-left">
+                    <p className="text-lg sm:text-2xl md:text-3xl lg:text-4xl text-black/90 leading-relaxed font-light mb-6 sm:mb-8">
                       As the face of most industries has changed substantially in the past 100 years, public education at its core remains the same.
                     </p>
-                    <p className="text-lg md:text-xl text-black/70 leading-relaxed">
+                    <p className="text-base sm:text-lg md:text-xl text-black/70 leading-relaxed">
                       By no means has the progress of K-12 public education in the U.S. kept up with the rest of the professional world.
                     </p>
                   </div>
@@ -303,11 +300,11 @@ const WhyPageContent = () => {
               </div>
               
               {/* Bottom right - Transition */}
-              <div className="flex justify-end items-end">
+              <div className="flex justify-center sm:justify-end items-end">
                 <ScrollAnimation direction="left" delay={1.0} once={false}>
-                  <div className="text-right">
-                    <div className="w-24 h-0.5 bg-black ml-auto mb-4"></div>
-                    <p className="text-lg text-black/80">The numbers tell the story</p>
+                  <div className="text-center sm:text-right">
+                    <div className="w-16 sm:w-24 h-0.5 bg-black mx-auto sm:ml-auto mb-4"></div>
+                    <p className="text-base sm:text-lg text-black/80">The numbers tell the story</p>
                   </div>
                 </ScrollAnimation>
               </div>
@@ -324,12 +321,12 @@ const WhyPageContent = () => {
             
             return (
               <section key={index} className="relative h-screen">
-                <div className="h-screen flex flex-col justify-between p-8 md:p-16 relative z-10">
+                <div className="h-screen flex flex-col justify-between mobile-container mobile-padding-responsive relative z-10">
                   {/* Massive number - center focus */}
                   <div className="flex-1 flex items-center justify-center">
                     <ScrollAnimation direction="up" delay={0.2} once={false}>
-                      <div className="text-center">
-                        <div className={`text-[8rem] md:text-[12rem] lg:text-[16rem] font-bold ${isBlackBg ? 'text-white' : 'text-black'} leading-[0.8] tracking-tight mb-8`}>
+                      <div className="text-center max-w-full overflow-hidden">
+                        <div className={`text-[4rem] sm:text-[8rem] md:text-[12rem] lg:text-[16rem] font-bold ${isBlackBg ? 'text-white' : 'text-black'} leading-[1.1] tracking-tight mb-6 sm:mb-8`}>
                           {stat.value}
                         </div>
                       </div>
@@ -337,14 +334,14 @@ const WhyPageContent = () => {
                   </div>
                   
                   {/* Description - positioned strategically */}
-                  <div className={`flex ${index % 2 === 0 ? 'justify-start' : 'justify-end'} items-end`}>
+                  <div className={`flex ${index % 2 === 0 ? 'justify-center sm:justify-start' : 'justify-center sm:justify-end'} items-end`}>
                     <ScrollAnimation direction={index % 2 === 0 ? "right" : "left"} delay={0.6} once={false}>
-                      <div className={`max-w-2xl ${index % 2 === 0 ? 'text-left' : 'text-right'}`}>
-                        <p className={`text-xl md:text-2xl lg:text-3xl ${isBlackBg ? 'text-white' : 'text-black'} font-medium leading-tight mb-4`}>
+                      <div className={`max-w-full sm:max-w-2xl ${index % 2 === 0 ? 'text-center sm:text-left' : 'text-center sm:text-right'}`}>
+                        <p className={`text-lg sm:text-xl md:text-2xl lg:text-3xl ${isBlackBg ? 'text-white' : 'text-black'} font-medium leading-tight mb-4`}>
                           {stat.description}
                         </p>
-                        <div className={`w-24 h-0.5 ${isBlackBg ? 'bg-white' : 'bg-black'} mb-4 ${index % 2 === 0 ? '' : 'ml-auto'}`}></div>
-                        <p className={`text-sm ${isBlackBg ? 'text-white/60' : 'text-black/60'}`}>
+                        <div className={`w-16 sm:w-24 h-0.5 ${isBlackBg ? 'bg-white' : 'bg-black'} mb-4 ${index % 2 === 0 ? 'mx-auto sm:mx-0' : 'mx-auto sm:ml-auto'}`}></div>
+                        <p className={`text-xs sm:text-sm ${isBlackBg ? 'text-white/60' : 'text-black/60'}`}>
                           {stat.source}, {stat.date}
                         </p>
                       </div>
@@ -357,11 +354,11 @@ const WhyPageContent = () => {
 
           {/* Vision Section - Full screen layout */}
           <section className="relative h-screen text-white">
-            <div className="h-screen flex flex-col justify-between p-8 md:p-16 relative z-10">
+            <div className="h-screen flex flex-col justify-between mobile-container mobile-padding-responsive relative z-10">
               {/* Top left - Title */}
-              <div className="flex items-start justify-start pt-16">
+              <div className="flex items-start justify-center sm:justify-start pt-12 sm:pt-16">
                 <ScrollAnimation direction="up" delay={0.2} once={false}>
-                  <h2 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white leading-[0.9] tracking-tight">
+                  <h2 className="mobile-text-large font-bold text-white tracking-tight text-center sm:text-left">
                     Our<br />
                     <span className="text-white/70">Vision</span>
                   </h2>
@@ -371,8 +368,8 @@ const WhyPageContent = () => {
               {/* Center - Main vision statement */}
               <div className="flex-1 flex items-center justify-center">
                 <ScrollAnimation direction="up" delay={0.6} once={false}>
-                  <div className="max-w-4xl text-center">
-                    <p className="text-2xl md:text-3xl lg:text-4xl text-white leading-relaxed font-light">
+                  <div className="max-w-full sm:max-w-4xl text-center">
+                    <p className="text-lg sm:text-2xl md:text-3xl lg:text-4xl text-white leading-relaxed font-light">
                       <span className="font-bold">Education for Our Future</span> is the first student coalition designing a comprehensive vision for the future of the K-12 sphere, because the education of tomorrow can only be designed by students today.
                     </p>
                   </div>
@@ -380,11 +377,11 @@ const WhyPageContent = () => {
               </div>
               
               {/* Bottom right - Call to action */}
-              <div className="flex justify-end items-end">
+              <div className="flex justify-center sm:justify-end items-end">
                 <ScrollAnimation direction="left" delay={1.0} once={false}>
-                  <div className="text-right">
-                    <div className="w-24 h-0.5 bg-white ml-auto mb-6"></div>
-                    <p className="text-xl md:text-2xl font-bold text-white mb-6">
+                  <div className="text-center sm:text-right">
+                    <div className="w-16 sm:w-24 h-0.5 bg-white mx-auto sm:ml-auto mb-6"></div>
+                    <p className="text-lg sm:text-xl md:text-2xl font-bold text-white mb-6">
                       This is a crisis. The time to act is now.
                     </p>
                   </div>
@@ -395,30 +392,30 @@ const WhyPageContent = () => {
 
           {/* Action Section - Final call to action */}
           <section className="relative h-screen">
-            <div className="h-screen flex flex-col justify-center items-center p-8 md:p-16 relative z-10">
+            <div className="h-screen flex flex-col justify-center items-center mobile-container mobile-padding-responsive relative z-10">
               <ScrollAnimation direction="up" delay={0.2} once={false}>
-                <div className="text-center max-w-4xl">
-                  <h2 className="text-6xl md:text-8xl lg:text-9xl font-bold text-black leading-[0.8] tracking-tight mb-12">
+                <div className="text-center max-w-full sm:max-w-4xl">
+                  <h2 className="mobile-text-xl font-bold text-black tracking-tight mb-8 sm:mb-12">
                     Join Us
                   </h2>
-                  <p className="text-xl md:text-2xl text-black/80 leading-relaxed mb-12 max-w-2xl mx-auto">
+                  <p className="text-lg sm:text-xl md:text-2xl text-black/80 leading-relaxed mb-8 sm:mb-12 max-w-full sm:max-w-2xl mx-auto">
                     Be part of the movement to transform education from the inside out
                   </p>
-                  <div className="flex flex-col sm:flex-row gap-6 justify-center">
+                  <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center max-w-full">
                     <Link
                       href="/contact"
-                      className="px-12 py-4 bg-black text-white rounded-full font-semibold text-lg hover:bg-black/80 transition-all duration-200 flex items-center justify-center gap-2 group"
+                      className="px-8 sm:px-12 py-3 sm:py-4 bg-black text-white rounded-full font-semibold text-base sm:text-lg hover:bg-black/80 transition-all duration-200 flex items-center justify-center gap-2 group"
                     >
                       <span>Get Involved</span>
                       <span className="inline-block transform group-hover:translate-x-1 transition-transform duration-200">
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                        <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                         </svg>
                       </span>
                     </Link>
                     <Link
                       href="/"
-                      className="px-12 py-4 bg-white border-2 border-black text-black rounded-full font-semibold text-lg hover:bg-black/5 transition-all duration-200"
+                      className="px-8 sm:px-12 py-3 sm:py-4 bg-white border-2 border-black text-black rounded-full font-semibold text-base sm:text-lg hover:bg-black/5 transition-all duration-200"
                     >
                       Learn More
                     </Link>

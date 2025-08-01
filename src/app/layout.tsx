@@ -47,6 +47,21 @@ export default function RootLayout({
         {/* Viewport meta tag for responsive design */}
         <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
         
+        {/* DNS prefetch for external resources */}
+        <link rel="dns-prefetch" href="//unpkg.com" />
+        
+        {/* Preconnect to external domains */}
+        <link rel="preconnect" href="https://unpkg.com" crossOrigin="" />
+        
+        {/* Preload critical fonts - only existing ones */}
+        <link 
+          rel="preload" 
+          href="/fonts/Helvetica-Bold.ttf" 
+          as="font" 
+          type="font/ttf" 
+          crossOrigin="" 
+        />
+        
         {/* Canonical URL to prevent duplicate content */}
         <link rel="canonical" href={canonicalUrl} />
         
@@ -57,7 +72,16 @@ export default function RootLayout({
         {/* Theme color */}
         <meta name="theme-color" content="#000000" />
         
-        {/* External Scripts */}
+        {/* Critical CSS inline - base styles only */}
+        <style dangerouslySetInnerHTML={{
+          __html: `
+            html,body{margin:0;padding:0;font-family:Georgia,"Times New Roman",Times,serif;line-height:1.6;font-weight:400;background:#fff;color:#000}
+            *{box-sizing:border-box}
+            .antialiased{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+          `
+        }} />
+        
+        {/* External Scripts - defer to reduce critical path */}
         <Script
           crossOrigin="anonymous"
           src="//unpkg.com/same-runtime/dist/index.global.js"
