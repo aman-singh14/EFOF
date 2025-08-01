@@ -43,7 +43,7 @@ function ProgressiveHeroVideo() {
       onCanPlay={handleVideoCanPlay}
       onLoadedData={handleVideoCanPlay}
     >
-      <source src="/videos/hero-video.mp4" type="video/mp4" />
+      <source src="/videos/12266398_1920_1080_30fps.mp4" type="video/mp4" />
     </video>
   );
 }
@@ -214,8 +214,8 @@ function OptimizedHeroSection() {
       <div className="absolute inset-0 bg-black/30" style={{ zIndex: 5 }} />
 
       <div className="relative h-screen flex flex-col justify-between mobile-container mobile-padding-responsive" style={{ zIndex: 10 }}>
-        <div className="flex-1 flex items-start justify-start pt-16 sm:pt-20 md:pt-32">
-          <h1 className="mobile-text-xl font-bold text-white tracking-tight max-w-full">
+        <div className="flex-1 flex items-center justify-center pt-16 sm:pt-20 md:pt-32">
+          <h1 className="mobile-text-xl font-bold text-white tracking-tight max-w-full text-center">
             {/* First line renders immediately for LCP */}
             <span className="inline-block">
               EDUCATION
