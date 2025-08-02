@@ -2,19 +2,3 @@ User-agent: *
 Allow: /
 
 Sitemap: https://educationforourfutures.com/sitemap.xml
-
-User-agent: Googlebot
-Allow: /
-
-User-agent: Bingbot
-Allow: /
-
-User-agent: Slurp
-Allow: /
-
-# Block bad bots (example - add more as needed)
-User-agent: AhrefsBot
-Disallow: /
-
-User-agent: SemrushBot
-Disallow: /
