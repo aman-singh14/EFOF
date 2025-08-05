@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import ClientBody from "./ClientBody";
 import Script from "next/script";
+import { Analytics } from '@vercel/analytics/react';
 
 export const metadata: Metadata = {
   title: "Education for Our Futures",
@@ -89,7 +90,10 @@ export default function RootLayout({
         />
       </head>
       <body suppressHydrationWarning className="antialiased font-serif">
-        <ClientBody>{children}</ClientBody>
+        <ClientBody>
+          {children}
+          <Analytics />
+        </ClientBody>
       </body>
     </html>
   );

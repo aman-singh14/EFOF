@@ -415,7 +415,7 @@ export default function Home() {
                 <ScrollAnimation direction="up" delay={0.6} once={false}>
                   <div className="max-w-4xl text-center">
                     <p className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl text-black font-medium leading-tight">
-                      Education for Our Futures is a student collective that seeks to rethink K-12 through a comprehensive blueprint and evaulations of education technology.
+                      Education for Our Futures is a student collective that seeks to rethink K-12 through a comprehensive blueprint and evaluations of education technology.
                     </p>
                   </div>
                 </ScrollAnimation>
