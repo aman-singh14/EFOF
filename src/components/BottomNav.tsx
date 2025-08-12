@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Users, Mail, Info, Briefcase, Users as TeamIcon, UserPlus } from 'lucide-react';
+import { Home, Users, Mail, Info, Briefcase, Users as TeamIcon, UserPlus, FileText } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -16,7 +16,8 @@ export default function BottomNav() {
 
 
   // Check if current path is part of the about or contact sections
-  const isAboutSection = pathname === '/why' || 
+  const isAboutSection = pathname === '/brief' ||
+                        pathname === '/why' || 
                         pathname === '/board' || 
                         pathname === '/portfolio' || 
                         pathname === '/team';
@@ -36,6 +37,7 @@ export default function BottomNav() {
       icon: Info,
       isLink: false,
       subItems: [
+        { href: '/brief', label: 'Brief', icon: FileText },
         { href: '/why', label: 'Why?', icon: Info },
         { href: '/board', label: 'Board', icon: Users },
         { href: '/portfolio', label: 'Portfolio', icon: Briefcase },

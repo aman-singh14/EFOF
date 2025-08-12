@@ -18,6 +18,7 @@ const MainNav = () => {
     { 
       label: 'About',
       subItems: [
+        { href: '/brief', label: 'Brief' },
         { href: '/why', label: 'Why?' },
         { href: '/board', label: 'Board' },
         { href: '/portfolio', label: 'Portfolio' },
@@ -57,7 +58,8 @@ const MainNav = () => {
   }, []);
 
   // Check if current path is part of the about or contact sections
-  const isAboutSection = pathname === '/why' || 
+  const isAboutSection = pathname === '/brief' ||
+                        pathname === '/why' || 
                         pathname === '/board' || 
                         pathname === '/portfolio' || 
                         pathname === '/team';
