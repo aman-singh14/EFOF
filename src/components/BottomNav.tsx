@@ -9,9 +9,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 export default function BottomNav() {
   const pathname = usePathname();
   const [isAboutOpen, setIsAboutOpen] = useState(false);
-  const [isContactOpen, setIsContactOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const contactDropdownRef = useRef<HTMLDivElement>(null);
   
 
 
@@ -22,7 +20,7 @@ export default function BottomNav() {
                         pathname === '/portfolio' || 
                         pathname === '/team';
   
-  const isContactSection = pathname === '/contact' || pathname === '/join-us';
+  const isContactSection = pathname === '/contact';
 
   // Navigation items with their respective paths and icons
   const navItems = [
@@ -45,13 +43,10 @@ export default function BottomNav() {
       ]
     },
     { 
+      href: '/contact', 
       label: 'Contact', 
       icon: Mail,
-      isLink: false,
-      subItems: [
-        { href: '/join-us', label: 'Join Us', icon: UserPlus },
-        { href: '/contact', label: 'Outreach', icon: Mail },
-      ]
+      isLink: true
     },
   ];
 
@@ -60,9 +55,6 @@ export default function BottomNav() {
     function handleClickOutside(event: MouseEvent) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setIsAboutOpen(false);
-      }
-      if (contactDropdownRef.current && !contactDropdownRef.current.contains(event.target as Node)) {
-        setIsContactOpen(false);
       }
     }
 
@@ -75,7 +67,6 @@ export default function BottomNav() {
   // Close dropdowns when route changes
   useEffect(() => {
     setIsAboutOpen(false);
-    setIsContactOpen(false);
   }, [pathname]);
 
   // Animation variants for the dropdown
@@ -164,48 +155,7 @@ export default function BottomNav() {
         )}
       </AnimatePresence>
 
-      {/* Contact Dropdown menu */}
-      <AnimatePresence>
-        {isContactOpen && (
-          <motion.div 
-            className="bg-white/95 backdrop-blur-xl rounded-2xl border border-border mb-3 overflow-hidden"
-            initial="hidden"
-            animate="visible"
-            exit="hidden"
-            variants={dropdownVariants}
-            transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
-          >
-            <div className="p-1.5">
-              <div className="flex flex-col space-y-1.5">
-                {navItems.find(item => item.label === 'Contact')?.subItems?.map((subItem) => {
-                  const isActive = pathname === subItem.href;
-                  const Icon = subItem.icon;
-                  
-                  return (
-                    <motion.div 
-                      key={subItem.href} 
-                      variants={itemVariants}
-                    >
-                      <Link
-                        href={subItem.href || '#'}
-                        className={`flex items-center justify-center p-2.5 rounded-xl transition-colors duration-200 ${
-                          isActive
-                            ? 'bg-black text-white'
-                            : 'text-black hover:bg-gray-100'
-                        }`}
-                        onClick={() => setIsContactOpen(false)}
-                      >
-                        <Icon className={`w-4 h-4 ${isActive ? 'text-white' : 'text-black'}`} />
-                        <span className="ml-3 text-sm font-medium">{subItem.label}</span>
-                      </Link>
-                    </motion.div>
-                  );
-                })}
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+
 
       {/* Main navigation bar */}
       <motion.nav 
@@ -224,7 +174,7 @@ export default function BottomNav() {
               ? pathname === item.href 
               : item.label === 'About' 
                 ? isAboutSection 
-                : isContactSection;
+                : false;
             const Icon = item.icon;
             
             if (item.label === 'About') {
@@ -233,7 +183,6 @@ export default function BottomNav() {
                   <motion.button
                     onClick={() => {
                       setIsAboutOpen(!isAboutOpen);
-                      if (isAboutOpen) setIsContactOpen(false);
                     }}
                     className={`flex items-center justify-center p-2 sm:p-3 rounded-full transition-colors duration-200 ${
                       isActive || isAboutOpen
@@ -260,38 +209,7 @@ export default function BottomNav() {
               );
             }
             
-            if (item.label === 'Contact') {
-              return (
-                <div key={item.label} ref={contactDropdownRef} className="relative">
-                  <motion.button
-                    onClick={() => {
-                      setIsContactOpen(!isContactOpen);
-                      if (isContactOpen) setIsAboutOpen(false);
-                    }}
-                    className={`flex items-center justify-center p-2 sm:p-3 rounded-full transition-colors duration-200 ${
-                      isActive || isContactOpen
-                        ? 'text-white bg-black'
-                        : 'text-black hover:bg-gray-100'
-                    }`}
-                    aria-haspopup="true"
-                    aria-expanded={isContactOpen}
-                    title="Contact & Join Us"
-                  >
-                    <Icon className={`w-4 h-4 sm:w-5 sm:h-5 ${isActive || isContactOpen ? 'text-white' : 'text-black'}`} />
-                    {isContactOpen && (
-                      <motion.span 
-                        className="ml-2 text-sm font-medium text-white whitespace-nowrap"
-                        initial={{ opacity: 0, x: -10 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        exit={{ opacity: 0, x: -10 }}
-                      >
-                        Close
-                      </motion.span>
-                    )}
-                  </motion.button>
-                </div>
-              );
-            }
+
             
             return (
               <div key={item.href}>

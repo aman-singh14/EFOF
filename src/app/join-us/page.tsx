@@ -23,8 +23,8 @@ declare global {
         };
         onOpen?: () => void;
         onClose?: () => void;
-        onPageView?: (data: { event: string; formId: string; [key: string]: unknown }) => void;
-        onSubmit?: (data: { responseId: string; fields: Record<string, unknown>; [key: string]: unknown }) => void;
+        onPageView?: (data: { event: string; formId: string;[key: string]: unknown }) => void;
+        onSubmit?: (data: { responseId: string; fields: Record<string, unknown>;[key: string]: unknown }) => void;
       }) => void;
     };
   }
@@ -36,7 +36,7 @@ export default function JoinUsPage() {
     const script = document.createElement('script');
     script.src = 'https://tally.so/widgets/embed.js';
     script.async = true;
-    
+
     // Create the load function
     const loadEmbeds = () => {
       if (typeof window.Tally !== 'undefined') {
@@ -46,16 +46,16 @@ export default function JoinUsPage() {
         setTimeout(loadEmbeds, 100);
       }
     };
-    
+
     script.onload = loadEmbeds;
-    
+
     // Add error handling
     script.onerror = () => {
       console.error('Failed to load Tally script');
     };
 
     document.head.appendChild(script);
-    
+
     return () => {
       // Cleanup
       if (script.parentNode) {
@@ -122,7 +122,7 @@ export default function JoinUsPage() {
           </div>
         </section>
       </div>
-      
+
       {/* Footer */}
       <Footer />
     </>

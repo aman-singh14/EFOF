@@ -296,9 +296,6 @@ export default function Team() {
                       <p className="text-xl sm:text-2xl md:text-3xl text-gray-300 font-light tracking-wide">
                         Founder
                       </p>
-                      <p className="text-base sm:text-lg text-gray-300 opacity-70 max-w-full sm:max-w-md mx-auto lg:mx-0 leading-relaxed px-4 lg:px-0">
-                        Visionary leader driving educational innovation through technology and collaboration.
-                      </p>
                     </div>
                   </div>
 
@@ -340,9 +337,6 @@ export default function Team() {
                     <div className="space-y-1 sm:space-y-2">
                       <p className="text-xl sm:text-2xl md:text-3xl text-gray-300 font-light tracking-wide">
                         Founder
-                      </p>
-                      <p className="text-base sm:text-lg text-gray-300 opacity-70 leading-relaxed px-4 lg:px-0">
-                        Strategic thinker focused on creating meaningful impact in the education sector.
                       </p>
                     </div>
                   </div>

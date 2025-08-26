@@ -8,9 +8,7 @@ import Image from 'next/image';
 const MainNav = () => {
   const pathname = usePathname();
   const [isAboutOpen, setIsAboutOpen] = useState(false);
-  const [isContactOpen, setIsContactOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const contactDropdownRef = useRef<HTMLDivElement>(null);
 
   // Navigation items
   const navItems = [
@@ -25,19 +23,12 @@ const MainNav = () => {
         { href: '/team', label: 'Team' },
       ]
     },
-    { 
-      label: 'Contact',
-      subItems: [
-        { href: '/join-us', label: 'Join Us' },
-        { href: '/contact', label: 'Outreach' },
-      ]
-    },
+    { href: '/contact', label: 'Contact' },
   ];
 
   // Close dropdowns when route changes
   useEffect(() => {
     setIsAboutOpen(false);
-    setIsContactOpen(false);
   }, [pathname]);
 
   // Close dropdowns when clicking outside
@@ -45,9 +36,6 @@ const MainNav = () => {
     function handleClickOutside(event: MouseEvent) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setIsAboutOpen(false);
-      }
-      if (contactDropdownRef.current && !contactDropdownRef.current.contains(event.target as Node)) {
-        setIsContactOpen(false);
       }
     }
 
@@ -64,7 +52,7 @@ const MainNav = () => {
                         pathname === '/portfolio' || 
                         pathname === '/team';
   
-  const isContactSection = pathname === '/contact' || pathname === '/join-us';
+  const isContactSection = pathname === '/contact';
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white backdrop-blur-md shadow-sm border-b border-black">
@@ -86,34 +74,24 @@ const MainNav = () => {
           <nav className="hidden md:flex items-center space-x-8">
             {navItems.map((item) => {
               if (item.subItems) {
-                const isContact = item.label === 'Contact';
-                const isOpen = isContact ? isContactOpen : isAboutOpen;
-                const setIsOpen = isContact ? setIsContactOpen : setIsAboutOpen;
-                
                 return (
-                  <div key={item.label} className="relative" ref={isContact ? contactDropdownRef : dropdownRef}>
+                  <div key={item.label} className="relative" ref={dropdownRef}>
                     <button
                       onClick={() => {
-                        setIsOpen(!isOpen);
-                        // Close the other dropdown if it's open
-                        if (isContact) {
-                          setIsAboutOpen(false);
-                        } else {
-                          setIsContactOpen(false);
-                        }
+                        setIsAboutOpen(!isAboutOpen);
                       }}
                       className={`flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors duration-200 ${
-                        (isContact ? isContactSection : isAboutSection) || isOpen
+                        isAboutSection || isAboutOpen
                           ? 'text-black font-semibold' 
                           : 'text-black hover:text-gray-600'
                       }`}
                       aria-haspopup="true"
-                      aria-expanded={isOpen}
+                      aria-expanded={isAboutOpen}
                     >
                       {item.label}
                       <svg
                         className={`ml-1 w-4 h-4 transition-transform ${
-                          isOpen ? 'transform rotate-180' : ''
+                          isAboutOpen ? 'transform rotate-180' : ''
                         }`}
                         fill="none"
                         viewBox="0 0 24 24"
@@ -129,7 +107,7 @@ const MainNav = () => {
                     </button>
 
                     {/* Dropdown Menu */}
-                    {isOpen && (
+                    {isAboutOpen && (
                       <div className="absolute left-0 mt-2 w-56 rounded-md bg-white border border-black z-50">
                         <div className="py-1">
                           {item.subItems.map((subItem) => (
@@ -138,7 +116,7 @@ const MainNav = () => {
                               href={subItem.href}
                               className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                               onClick={() => {
-                                setIsOpen(false);
+                                setIsAboutOpen(false);
                               }}
                             >
                               {subItem.label}
