@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { FadeIn } from "@/components/FadeIn";
 import Footer from "@/components/Footer";
+import { ScrollReveal } from "@/components/ScrollReveal";
 
 import Logo from "@/components/Logo";
 
@@ -22,26 +23,75 @@ export default function Board() {
           <Logo variant="white" size="sm" priority />
         </Link>
       </div>
-      
-      <div className="min-h-screen bg-black flex items-center justify-center overflow-x-hidden">
+
+      <main className="bg-black overflow-x-hidden">
         <FadeIn>
-          <div className="text-center px-4 sm:px-6 max-w-full">
-            <div className="mb-6 sm:mb-8">
-              <h1 className="text-3xl sm:text-4xl md:text-6xl font-light text-white mb-4">
-                Board
-              </h1>
-              <div className="w-16 sm:w-24 h-0.5 bg-white mx-auto mb-6 sm:mb-8"></div>
-              <p className="text-lg sm:text-xl md:text-2xl text-gray-300 font-light">
-                Coming Soon
-              </p>
-            </div>
-            <p className="text-sm sm:text-base text-gray-400 max-w-full sm:max-w-md mx-auto leading-relaxed">
-              We're assembling an exceptional board of advisors. Details will be shared soon.
+          <header className="px-4 sm:px-6 max-w-6xl mx-auto pt-20 sm:pt-24 md:pt-28">
+            <h1 className="text-3xl sm:text-4xl md:text-6xl font-light text-white mb-4">
+              Board of Advisors
+            </h1>
+            <div className="w-16 sm:w-24 h-0.5 bg-white mb-6 sm:mb-8"></div>
+            <p className="text-sm sm:text-base text-gray-400 max-w-2xl leading-relaxed">
+              Meet the leaders guiding Education for Our Future. Each member brings unique experience and perspective.
             </p>
-          </div>
+          </header>
         </FadeIn>
-      </div>
-      
+
+        {/* Board Members */}
+        {[
+          {
+            name: "Leilani Cauthen",
+            image: "/optimized/leilani.webp",
+            description:
+              "Futurist, AI Developer, and CEO and Publisher at the Learning Counsel, a research and news media hub for K12 education. LeiLani has 35 years of experience in news media, research, software development, legislative work, and has been helping define this century's real change to teaching and learning alongside technical innovation. Author of The Human Singularity – Balancing AI with Education, The Consumerization of Learning as well as many Special Reports, articles and podcasts.",
+          },
+          {
+            name: "Crystal Yang",
+            image: "/optimized/crystal.webp",
+            description:
+              "Crystal Yang is the founder of Audemy Games, a nonprofit transforming education for blind and visually impaired students through accessible, audio-based learning games. Passionate about equity and innovation, she designs tools that make core subjects like math and literacy engaging and inclusive. Her work has reached students in over 130 countries, redefining what accessible education can look like.",
+          },
+        ].map((member, index) => {
+          const isEven = index % 2 === 0;
+          const sectionId = member.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+          return (
+            <ScrollReveal key={member.name} delay={index * 200}>
+              <section
+                id={sectionId}
+                className="px-4 sm:px-6 py-12 sm:py-16 md:py-20"
+                aria-labelledby={`${sectionId}-title`}
+              >
+                <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-8 md:gap-12 items-center">
+                  <div className={isEven ? "order-1" : "order-1 md:order-2"}>
+                    <div className="relative w-full aspect-[4/3] bg-white/5 rounded-lg overflow-hidden ring-1 ring-white/10">
+                      <Image
+                        src={member.image}
+                        alt={member.name}
+                        fill
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 600px"
+                        className="object-contain p-6"
+                        priority={index === 0}
+                      />
+                    </div>
+                  </div>
+                  <div className={isEven ? "order-2" : "order-2 md:order-1"}>
+                    <h2
+                      id={`${sectionId}-title`}
+                      className="text-2xl sm:text-3xl md:text-4xl font-light text-white mb-4"
+                    >
+                      {member.name}
+                    </h2>
+                    <p className="text-base sm:text-lg text-gray-300 leading-relaxed">
+                      {member.description}
+                    </p>
+                  </div>
+                </div>
+              </section>
+            </ScrollReveal>
+          );
+        })}
+      </main>
+
       <Footer />
     </div>
   );
