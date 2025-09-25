@@ -51,6 +51,12 @@ export default function Board() {
             description:
               "Crystal Yang is the founder of Audemy Games, a nonprofit transforming education for blind and visually impaired students through accessible, audio-based learning games. Passionate about equity and innovation, she designs tools that make core subjects like math and literacy engaging and inclusive. Her work has reached students in over 130 countries, redefining what accessible education can look like.",
           },
+          {
+            name: "Chaks Appalabattula",
+            image: "/optimized/chaks.webp",
+            description:
+              "Chaks, Founder and CEO of Bloomz, a parent communication app transforming how districts, schools, teachers, and families connect. With more than 20 years of experience in technology, product leadership, and partnerships, Chaks previously served as VP at GlobalScholar, leading the company's vision for a comprehensive learning platform, and at AskMe Corporation, driving knowledge management solutions for Fortune 500 clients. Earlier, Chaks worked at Microsoft overseeing global releases of Word and Publisher. A gold medalist in Computer Science & Engineering from the National Institute of Technology, Warangal, India, Chaks brings expertise as a start-up all-rounder with deep skills in product strategy, market development, and innovation in education technology.",
+          },
         ].map((member, index) => {
           const isEven = index % 2 === 0;
           const sectionId = member.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");

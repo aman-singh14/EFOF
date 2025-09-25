@@ -296,6 +296,9 @@ export default function Team() {
                       <p className="text-xl sm:text-2xl md:text-3xl text-gray-300 font-light tracking-wide">
                         Founder
                       </p>
+                      <p className="text-lg sm:text-xl md:text-2xl text-gray-400 font-light tracking-wide">
+                        Director of Blueprints
+                      </p>
                     </div>
                   </div>
 
@@ -337,6 +340,9 @@ export default function Team() {
                     <div className="space-y-1 sm:space-y-2">
                       <p className="text-xl sm:text-2xl md:text-3xl text-gray-300 font-light tracking-wide">
                         Founder
+                      </p>
+                      <p className="text-lg sm:text-xl md:text-2xl text-gray-400 font-light tracking-wide">
+                        Director of Evaluations
                       </p>
                     </div>
                   </div>
