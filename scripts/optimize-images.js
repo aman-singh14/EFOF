@@ -25,9 +25,20 @@ const imagesToOptimize = [
   {
     input: 'EFOF Logo 2.png',
     outputs: [
-      { name: 'efof-logo-sm.webp', width: 120, height: 68, format: 'webp' },
-      { name: 'efof-logo-md.webp', width: 180, height: 101, format: 'webp' },
-      { name: 'efof-logo-lg.webp', width: 250, height: 141, format: 'webp' },
+      { name: 'efof-logo-black-sm.webp', width: 120, height: 68, format: 'webp' },
+      { name: 'efof-logo-black-md.webp', width: 180, height: 101, format: 'webp' },
+      { name: 'efof-logo-black-lg.webp', width: 250, height: 141, format: 'webp' },
+    ]
+  },
+  {
+    input: 'White EFOF Logo.png',
+    outputs: [
+      { name: 'efof-logo-white-sm.webp', width: 120, height: 68, format: 'webp' },
+      { name: 'efof-logo-white-md.webp', width: 180, height: 101, format: 'webp' },
+      { name: 'efof-logo-white-lg.webp', width: 250, height: 141, format: 'webp' },
+      { name: 'efof-logo-white-transparent-sm.webp', width: 120, height: 68, format: 'webp', transparent: true },
+      { name: 'efof-logo-white-transparent-md.webp', width: 180, height: 101, format: 'webp', transparent: true },
+      { name: 'efof-logo-white-transparent-lg.webp', width: 250, height: 141, format: 'webp', transparent: true },
     ]
   }
 ];
@@ -55,15 +66,25 @@ async function optimizeImages() {
       const outputPath = path.join(optimizedDir, output.name);
       
       try {
-        await sharp(inputPath)
+        let sharpInstance = sharp(inputPath)
           .resize(output.width, output.height, {
-            fit: 'cover',
-            position: 'center'
-          })
-          .webp({ quality: output.quality || 85 })
-          .toFile(outputPath);
+            fit: 'contain',
+            position: 'center',
+            background: output.transparent ? { r: 0, g: 0, b: 0, alpha: 0 } : { r: 255, g: 255, b: 255, alpha: 1 }
+          });
+
+        if (output.transparent) {
+          sharpInstance = sharpInstance.png({ compressionLevel: 9 }).webp({ 
+            quality: output.quality || 95,
+            lossless: true
+          });
+        } else {
+          sharpInstance = sharpInstance.webp({ quality: output.quality || 85 });
+        }
+
+        await sharpInstance.toFile(outputPath);
         
-        console.log(`✓ Created ${output.name} (${output.width}x${output.height})`);
+        console.log(`✓ Created ${output.name} (${output.width}x${output.height})${output.transparent ? ' [transparent]' : ''}`);
       } catch (error) {
         console.error(`✗ Failed to create ${output.name}:`, error.message);
       }

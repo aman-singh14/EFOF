@@ -374,7 +374,7 @@ export default function Home() {
         <div className="fixed top-4 left-4 md:top-6 md:left-6 z-50 hidden md:block">
           <Link href="/" aria-label="Home">
             <Logo
-              variant={currentSection === 1 || currentSection === 2 || currentSection === 4 ? "black" : "white"}
+              variant={currentSection === 1 || currentSection === 2 || currentSection === 4 ? "white" : "black"}
               size="md"
               priority={true}
             />
@@ -383,7 +383,7 @@ export default function Home() {
         <div className="sticky top-0 left-0 z-50 block md:hidden bg-transparent pt-2 pl-2">
           <Link href="/" aria-label="Home">
             <Logo
-              variant={currentSection === 1 || currentSection === 2 || currentSection === 4 ? "black" : "white"}
+              variant={currentSection === 1 || currentSection === 2 || currentSection === 4 ? "white" : "black"}
               size="sm"
               priority={true}
             />

@@ -27,7 +27,9 @@ export default function Logo({
   const [hasError, setHasError] = useState(false);
   
   const logoConfig = logoSizes[size];
-  const logoSrc = variant === 'black' ? '/optimized/efof-logo-lg.webp' : '/optimized/efof-logo-lg.webp';
+  const logoSrc = variant === 'black' 
+    ? `/optimized/efof-logo-black-${size}.webp` 
+    : `/optimized/efof-logo-white-transparent-${size}.webp`;
 
   // For critical logos (priority=true), render immediately without loading states
   if (priority) {

@@ -18,7 +18,7 @@ export default function Footer({ className = "" }: { className?: string }) {
               aria-label="Education for Our Future homepage"
             >
               <Logo
-                variant="white"
+                variant="black"
                 size="md"
               />
               <span className="mt-2 sm:mt-0 sm:ml-4 text-white text-lg sm:text-xl font-medium text-center sm:text-left">Education for Our Future</span>

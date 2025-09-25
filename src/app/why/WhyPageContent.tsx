@@ -1,6 +1,5 @@
 'use client';
 
-import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState, useRef } from "react";
 import ScrollAnimation from "@/components/ScrollAnimation";
@@ -162,21 +161,26 @@ const WhyPageContent = () => {
           <Link href="/" aria-label="Home">
             <Logo 
               variant={
-                // Determine which logo variant to use based on section background
-                // Hero (0) - white bg - black logo
-                // Questions (1,2,3) - alternating bg - alternating logo
-                // Context (4) - white bg - black logo
-                // Statistics (5,6,7,8) - alternating bg - alternating logo
-                // Vision (9) - black bg - white logo
-                // Action (10) - white bg - black logo
+                // Logo should match background: white bg = white logo, black bg = black logo
+                // Hero (0) = white bg = white logo
+                // Q1 (1) = black bg = black logo  
+                // Q2 (2) = white bg = white logo
+                // Q3 (3) = black bg = black logo
+                // Context (4) = white bg = white logo
+                // Stat1 (5) = black bg = black logo
+                // Stat2 (6) = white bg = white logo  
+                // Stat3 (7) = black bg = black logo
+                // Stat4 (8) = white bg = white logo
+                // Vision (9) = black bg = black logo
+                // Action (10) = white bg = white logo
                 currentSection === 0 || 
                 currentSection === 2 || 
                 currentSection === 4 || 
                 currentSection === 6 || 
                 currentSection === 8 || 
                 currentSection === 10 
-                  ? "black" 
-                  : "white"
+                  ? "white" 
+                  : "black"
               } 
               size="md"
               priority
@@ -193,8 +197,8 @@ const WhyPageContent = () => {
                 currentSection === 6 || 
                 currentSection === 8 || 
                 currentSection === 10 
-                  ? "black" 
-                  : "white"
+                  ? "white" 
+                  : "black"
               } 
               size="sm"
               priority

@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
+import Logo from './Logo';
 
 const MainNav = () => {
   const pathname = usePathname();
@@ -60,14 +61,7 @@ const MainNav = () => {
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
           <Link href="/" className="flex-shrink-0">
-            <Image
-              src="/optimized/efof-logo-lg.webp"
-              alt="EFOF Logo"
-              width={200}
-              height={60}
-              className="h-12 w-auto hover:opacity-90 transition-opacity duration-200"
-              priority
-            />
+            <Logo variant="white" size="lg" priority />
           </Link>
 
           {/* Desktop Navigation */}

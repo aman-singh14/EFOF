@@ -53,12 +53,12 @@ export default function Portfolio() {
       {/* Top-left logo */}
       <div className="fixed top-4 left-4 md:top-6 md:left-6 z-50 hidden md:block">
         <Link href="/" aria-label="Home">
-          <Logo variant="black" size="md" priority />
+          <Logo variant="white" size="md" priority />
         </Link>
       </div>
       <div className="sticky top-0 left-0 z-50 block md:hidden bg-transparent pt-2 pl-2">
         <Link href="/" aria-label="Home">
-          <Logo variant="black" size="sm" priority />
+          <Logo variant="white" size="sm" priority />
         </Link>
       </div>
 
