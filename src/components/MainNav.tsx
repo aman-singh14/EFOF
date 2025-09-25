@@ -61,7 +61,7 @@ const MainNav = () => {
           {/* Logo */}
           <Link href="/" className="flex-shrink-0">
             <Image
-              src="/EFOF Logo.png"
+              src="/optimized/efof-logo-lg.webp"
               alt="EFOF Logo"
               width={200}
               height={60}

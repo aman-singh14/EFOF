@@ -56,12 +56,12 @@ export default function ContactPage() {
       {/* Top-left logo */}
       <div className="fixed top-6 left-6 z-50 hidden md:block">
         <Link href="/" aria-label="Home">
-          <Image src="/EFOF Logo.png" alt="Education for Our Future Logo" width={180} height={60} className="h-16 w-auto hover:opacity-90 transition-opacity duration-200" />
+          <Image src="/optimized/efof-logo-lg.webp" alt="Education for Our Future Logo" width={180} height={60} className="h-16 w-auto hover:opacity-90 transition-opacity duration-200" />
         </Link>
       </div>
       <div className="sticky top-0 left-0 z-50 block md:hidden bg-transparent pt-4 pl-4">
         <Link href="/" aria-label="Home">
-          <Image src="/EFOF Logo.png" alt="Education for Our Future Logo" width={140} height={48} className="h-14 w-auto hover:opacity-90 transition-opacity duration-200" />
+          <Image src="/optimized/efof-logo-md.webp" alt="Education for Our Future Logo" width={140} height={48} className="h-14 w-auto hover:opacity-90 transition-opacity duration-200" />
         </Link>
       </div>
 

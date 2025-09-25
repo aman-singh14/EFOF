@@ -14,7 +14,7 @@ export default function BriefPage() {
       <div className="fixed top-6 left-6 z-50 hidden md:block">
         <Link href="/" aria-label="Home">
           <Image
-            src="/EFOF Logo.png"
+            src="/optimized/efof-logo-lg.webp"
             alt="EFOF Logo"
             width={180}
             height={60}
@@ -26,7 +26,7 @@ export default function BriefPage() {
       <div className="sticky top-0 left-0 z-50 block md:hidden bg-transparent pt-4 pl-4">
         <Link href="/" aria-label="Home">
           <Image
-            src="/EFOF Logo.png"
+            src="/optimized/efof-logo-md.webp"
             alt="EFOF Logo"
             width={140}
             height={48}

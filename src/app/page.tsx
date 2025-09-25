@@ -540,8 +540,8 @@ export default function Home() {
                 <ScrollAnimation direction="up" delay={0.6} once={false}>
                   <div className="flex flex-col sm:flex-row justify-center items-center mobile-gap-responsive max-w-full">
                     {[
-                      { name: "Rishal Melvani", role: "Founder", image: "/rishal melvani.png" },
-                      { name: "Ishaan Singh", role: "Founder", image: "/ishaan singh.png" }
+                      { name: "Rishal Melvani", role: "Founder", image: "/optimized/rishal-melvani-md.webp" },
+                      { name: "Ishaan Singh", role: "Founder", image: "/optimized/ishaan-singh-md.webp" }
                     ].map((member, index) => (
                       <div key={index} className="text-center group mb-8 sm:mb-0">
                         <div

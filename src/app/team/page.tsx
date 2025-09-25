@@ -265,7 +265,7 @@ export default function Team() {
                   <div className="relative group">
                     <div className="relative">
                       <Image
-                        src="/rishal melvani.png"
+                        src="/optimized/rishal-melvani-lg.webp"
                         alt="Rishal Melvani - Founder"
                         width={400}
                         height={500}
@@ -353,7 +353,7 @@ export default function Team() {
                   <div className="relative group">
                     <div className="relative">
                       <Image
-                        src="/ishaan singh.png"
+                        src="/optimized/ishaan-singh-lg.webp"
                         alt="Ishaan Singh - Founder"
                         width={400}
                         height={500}
