@@ -29,7 +29,14 @@ export default function Logo({
   const logoConfig = logoSizes[size];
   const logoSrc = variant === 'black' 
     ? `/optimized/efof-logo-black-${size}.webp` 
-    : `/optimized/efof-logo-white-${size}.webp`;
+    : `/optimized/efof-logo-white-lg.webp`;
+  
+  // Use consistent dimensions for white logos since we're using the lg version
+  const actualConfig = variant === 'white' ? {
+    width: logoConfig.width,
+    height: logoConfig.height,
+    className: logoConfig.className
+  } : logoConfig;
 
   // For critical logos (priority=true), render immediately without loading states
   if (priority) {
@@ -38,17 +45,17 @@ export default function Logo({
         <Image
           src={logoSrc}
           alt="Education for Our Future Logo"
-          width={logoConfig.width}
-          height={logoConfig.height}
-          className={`${logoConfig.className} hover:opacity-90 transition-opacity duration-200`}
+          width={actualConfig.width}
+          height={actualConfig.height}
+          className={`${actualConfig.className} hover:opacity-90 transition-opacity duration-200`}
           priority={true}
           fetchPriority="high"
           quality={90}
           style={{
             objectFit: 'contain',
             width: 'auto',
-            height: logoConfig.className.includes('h-12') ? '3rem' : 
-                   logoConfig.className.includes('h-16') ? '4rem' : '5rem',
+            height: actualConfig.className.includes('h-12') ? '3rem' : 
+                   actualConfig.className.includes('h-16') ? '4rem' : '5rem',
           }}
         />
       </div>
@@ -60,9 +67,9 @@ export default function Logo({
       <Image
         src={logoSrc}
         alt="Education for Our Future Logo"
-        width={logoConfig.width}
-        height={logoConfig.height}
-        className={`${logoConfig.className} hover:opacity-90 transition-opacity duration-200 ${
+        width={actualConfig.width}
+        height={actualConfig.height}
+        className={`${actualConfig.className} hover:opacity-90 transition-opacity duration-200 ${
           isLoading ? 'opacity-0' : 'opacity-100'
         }`}
         onLoad={() => setIsLoading(false)}
@@ -72,16 +79,16 @@ export default function Logo({
         style={{
           objectFit: 'contain',
           width: 'auto',
-          height: logoConfig.className.includes('h-12') ? '3rem' : 
-                 logoConfig.className.includes('h-16') ? '4rem' : '5rem',
+          height: actualConfig.className.includes('h-12') ? '3rem' : 
+                 actualConfig.className.includes('h-16') ? '4rem' : '5rem',
         }}
       />
       {isLoading && (
         <div 
-          className={`absolute inset-0 bg-gray-200 animate-pulse ${logoConfig.className}`}
+          className={`absolute inset-0 bg-gray-200 animate-pulse ${actualConfig.className}`}
           style={{
-            width: logoConfig.width,
-            height: logoConfig.height,
+            width: actualConfig.width,
+            height: actualConfig.height,
           }}
         />
       )}
