@@ -29,7 +29,7 @@ export default function Logo({
   const logoConfig = logoSizes[size];
   const logoSrc = variant === 'black' 
     ? `/optimized/efof-logo-black-${size}.webp` 
-    : `/optimized/efof-logo-white-transparent-${size}.webp`;
+    : `/optimized/efof-logo-white-${size}.webp`;
 
   // For critical logos (priority=true), render immediately without loading states
   if (priority) {
