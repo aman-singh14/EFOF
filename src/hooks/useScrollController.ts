@@ -49,7 +49,7 @@ export const useScrollController = ({
   const lastScrollY = useRef(0);
   const lastScrollTime = useRef(Date.now());
   const velocityHistory = useRef<number[]>([]);
-  const scrollTimeout = useRef<NodeJS.Timeout>();
+  const scrollTimeout = useRef<NodeJS.Timeout>(undefined);
   const isScrollingToSection = useRef(false);
   const currentInputMethod = useRef<ScrollState['inputMethod']>('programmatic');
 

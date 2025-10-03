@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Users, Mail, Info, Briefcase, Users as TeamIcon, UserPlus, FileText } from 'lucide-react';
+import { Home, Users, Mail, Info, Briefcase, Users as TeamIcon, UserPlus, FileText, MapPin } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -18,7 +18,8 @@ export default function BottomNav() {
                         pathname === '/why' || 
                         pathname === '/board' || 
                         pathname === '/portfolio' || 
-                        pathname === '/team';
+                        pathname === '/team' ||
+                        pathname === '/map';
   
   const isContactSection = pathname === '/contact';
 
@@ -40,6 +41,7 @@ export default function BottomNav() {
         { href: '/board', label: 'Board', icon: Users },
         { href: '/portfolio', label: 'Portfolio', icon: Briefcase },
         { href: '/team', label: 'Team', icon: TeamIcon },
+        { href: '/map', label: 'Map', icon: MapPin },
       ]
     },
     { 

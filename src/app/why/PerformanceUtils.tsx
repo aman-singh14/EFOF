@@ -181,8 +181,8 @@ export const DeferredScript = memo(function DeferredScript({
  * Hook for optimizing animations with requestAnimationFrame
  */
 export function useAnimationFrame(callback: (deltaTime: number) => void, dependencies: React.DependencyList = []) {
-  const requestRef = useRef<number>();
-  const previousTimeRef = useRef<number>();
+  const requestRef = useRef<number>(undefined);
+  const previousTimeRef = useRef<number>(undefined);
   const callbackRef = useRef(callback);
   
   // Update callback ref when callback changes

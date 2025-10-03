@@ -22,6 +22,7 @@ const MainNav = () => {
         { href: '/board', label: 'Board' },
         { href: '/portfolio', label: 'Portfolio' },
         { href: '/team', label: 'Team' },
+        { href: '/map', label: 'Map' },
       ]
     },
     { href: '/contact', label: 'Contact' },
@@ -51,7 +52,8 @@ const MainNav = () => {
                         pathname === '/why' || 
                         pathname === '/board' || 
                         pathname === '/portfolio' || 
-                        pathname === '/team';
+                        pathname === '/team' ||
+                        pathname === '/map';
   
   const isContactSection = pathname === '/contact';
 

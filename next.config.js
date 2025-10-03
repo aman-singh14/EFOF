@@ -44,6 +44,21 @@ const nextConfig = {
       ],
     },
     
+    // Webpack configuration to handle react-map-gl
+    webpack: (config, { isServer }) => {
+      // Handle react-map-gl module resolution
+      if (!isServer) {
+        config.resolve.fallback = {
+          ...config.resolve.fallback,
+          fs: false,
+          path: false,
+          stream: false,
+        };
+      }
+      
+      return config;
+    },
+    
     // Headers for better caching
     async headers() {
       return [

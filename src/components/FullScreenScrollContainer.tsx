@@ -96,11 +96,13 @@ export default function FullScreenScrollContainer({
         {React.Children.map(children, (child, index) => {
           if (React.isValidElement(child)) {
             return React.cloneElement(child, {
-              ...child.props,
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              ...(child.props as any),
               'data-scroll-section': true,
               'data-section-index': index,
               style: {
-                ...(child.props.style || {}),
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                ...((child.props as any).style || {}),
                 scrollSnapAlign: 'start',
                 minHeight: '100vh',
               },
