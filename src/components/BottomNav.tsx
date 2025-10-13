@@ -2,24 +2,26 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Users, Mail, Info, Briefcase, Users as TeamIcon, UserPlus, FileText, MapPin } from 'lucide-react';
+import { Home, Users, Mail, Info, Briefcase, Users as TeamIcon, UserPlus, FileText, Lightbulb, Target, TrendingUp } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function BottomNav() {
   const pathname = usePathname();
   const [isAboutOpen, setIsAboutOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
-  
+  const [isImpactOpen, setIsImpactOpen] = useState(false);
+  const aboutDropdownRef = useRef<HTMLDivElement>(null);
+  const impactDropdownRef = useRef<HTMLDivElement>(null);
 
-
-  // Check if current path is part of the about or contact sections
+  // Check if current path is part of the about, impact, or contact sections
   const isAboutSection = pathname === '/brief' ||
                         pathname === '/why' || 
                         pathname === '/board' || 
                         pathname === '/portfolio' || 
-                        pathname === '/team' ||
-                        pathname === '/map';
+                        pathname === '/team';
+  
+  const isImpactSection = pathname === '/outcomes' ||
+                         pathname === '/insights';
   
   const isContactSection = pathname === '/contact';
 
@@ -41,7 +43,15 @@ export default function BottomNav() {
         { href: '/board', label: 'Board', icon: Users },
         { href: '/portfolio', label: 'Portfolio', icon: Briefcase },
         { href: '/team', label: 'Team', icon: TeamIcon },
-        { href: '/map', label: 'Map', icon: MapPin },
+      ]
+    },
+    {
+      label: 'Impact',
+      icon: TrendingUp,
+      isLink: false,
+      subItems: [
+        { href: '/outcomes', label: 'Outcomes', icon: Target },
+        { href: '/insights', label: 'Insights', icon: Lightbulb },
       ]
     },
     { 
@@ -55,8 +65,11 @@ export default function BottomNav() {
   // Close dropdowns when clicking outside
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (aboutDropdownRef.current && !aboutDropdownRef.current.contains(event.target as Node)) {
         setIsAboutOpen(false);
+      }
+      if (impactDropdownRef.current && !impactDropdownRef.current.contains(event.target as Node)) {
+        setIsImpactOpen(false);
       }
     }
 
@@ -69,6 +82,7 @@ export default function BottomNav() {
   // Close dropdowns when route changes
   useEffect(() => {
     setIsAboutOpen(false);
+    setIsImpactOpen(false);
   }, [pathname]);
 
   // Animation variants for the dropdown
@@ -157,6 +171,49 @@ export default function BottomNav() {
         )}
       </AnimatePresence>
 
+      {/* Impact Dropdown menu */}
+      <AnimatePresence>
+        {isImpactOpen && (
+          <motion.div 
+            className="bg-white/95 backdrop-blur-xl rounded-2xl border border-border mb-3 overflow-hidden"
+            initial="hidden"
+            animate="visible"
+            exit="hidden"
+            variants={dropdownVariants}
+            transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
+          >
+            <div className="p-1.5">
+              <div className="flex flex-col space-y-1.5">
+                {navItems.find(item => item.label === 'Impact')?.subItems?.map((subItem) => {
+                  const isActive = pathname === subItem.href;
+                  const Icon = subItem.icon;
+                  
+                  return (
+                    <motion.div 
+                      key={subItem.href} 
+                      variants={itemVariants}
+                    >
+                      <Link
+                        href={subItem.href || '#'}
+                        className={`flex items-center justify-center p-2.5 rounded-xl transition-colors duration-200 ${
+                          isActive
+                            ? 'bg-black text-white'
+                            : 'text-black hover:bg-gray-100'
+                        }`}
+                        onClick={() => setIsImpactOpen(false)}
+                      >
+                        <Icon className={`w-4 h-4 ${isActive ? 'text-white' : 'text-black'}`} />
+                        <span className="ml-3 text-sm font-medium">{subItem.label}</span>
+                      </Link>
+                    </motion.div>
+                  );
+                })}
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
 
 
       {/* Main navigation bar */}
@@ -170,33 +227,45 @@ export default function BottomNav() {
         <div className="flex items-center justify-between px-1 sm:px-2">
           {navItems.map((item) => {
             // Skip rendering if it's a sub-item (they're rendered in the dropdown)
-            if (!item.isLink && item.label !== 'About' && item.label !== 'Contact') return null;
+            if (!item.isLink && item.label !== 'About' && item.label !== 'Impact' && item.label !== 'Contact') return null;
             
+            const isAbout = item.label === 'About';
+            const isImpact = item.label === 'Impact';
+            const isOpen = isAbout ? isAboutOpen : isImpact ? isImpactOpen : false;
             const isActive = item.isLink 
               ? pathname === item.href 
-              : item.label === 'About' 
+              : isAbout 
                 ? isAboutSection 
-                : false;
+                : isImpact
+                  ? isImpactSection
+                  : false;
             const Icon = item.icon;
+            const dropdownRef = isAbout ? aboutDropdownRef : isImpact ? impactDropdownRef : null;
             
-            if (item.label === 'About') {
+            if (isAbout || isImpact) {
               return (
                 <div key={item.label} ref={dropdownRef} className="relative">
                   <motion.button
                     onClick={() => {
-                      setIsAboutOpen(!isAboutOpen);
+                      if (isAbout) {
+                        setIsAboutOpen(!isAboutOpen);
+                        setIsImpactOpen(false);
+                      } else if (isImpact) {
+                        setIsImpactOpen(!isImpactOpen);
+                        setIsAboutOpen(false);
+                      }
                     }}
                     className={`flex items-center justify-center p-2 sm:p-3 rounded-full transition-colors duration-200 ${
-                      isActive || isAboutOpen
+                      isActive || isOpen
                         ? 'text-white bg-black'
                         : 'text-black hover:bg-gray-100'
                     }`}
                     aria-haspopup="true"
-                    aria-expanded={isAboutOpen}
+                    aria-expanded={isOpen}
                     title={item.label}
                   >
-                    <Icon className={`w-4 h-4 sm:w-5 sm:h-5 ${isActive || isAboutOpen ? 'text-white' : 'text-black'}`} />
-                    {isAboutOpen && (
+                    <Icon className={`w-4 h-4 sm:w-5 sm:h-5 ${isActive || isOpen ? 'text-white' : 'text-black'}`} />
+                    {isOpen && (
                       <motion.span 
                         className="ml-2 text-sm font-medium text-white whitespace-nowrap"
                         initial={{ opacity: 0, x: -10 }}
@@ -210,8 +279,6 @@ export default function BottomNav() {
                 </div>
               );
             }
-            
-
             
             return (
               <div key={item.href}>

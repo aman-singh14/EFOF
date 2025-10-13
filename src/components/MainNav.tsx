@@ -9,7 +9,9 @@ import Logo from './Logo';
 const MainNav = () => {
   const pathname = usePathname();
   const [isAboutOpen, setIsAboutOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
+  const [isImpactOpen, setIsImpactOpen] = useState(false);
+  const aboutDropdownRef = useRef<HTMLDivElement>(null);
+  const impactDropdownRef = useRef<HTMLDivElement>(null);
 
   // Navigation items
   const navItems = [
@@ -22,7 +24,13 @@ const MainNav = () => {
         { href: '/board', label: 'Board' },
         { href: '/portfolio', label: 'Portfolio' },
         { href: '/team', label: 'Team' },
-        { href: '/map', label: 'Map' },
+      ]
+    },
+    {
+      label: 'Impact',
+      subItems: [
+        { href: '/outcomes', label: 'Outcomes' },
+        { href: '/insights', label: 'Insights' },
       ]
     },
     { href: '/contact', label: 'Contact' },
@@ -31,13 +39,17 @@ const MainNav = () => {
   // Close dropdowns when route changes
   useEffect(() => {
     setIsAboutOpen(false);
+    setIsImpactOpen(false);
   }, [pathname]);
 
   // Close dropdowns when clicking outside
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (aboutDropdownRef.current && !aboutDropdownRef.current.contains(event.target as Node)) {
         setIsAboutOpen(false);
+      }
+      if (impactDropdownRef.current && !impactDropdownRef.current.contains(event.target as Node)) {
+        setIsImpactOpen(false);
       }
     }
 
@@ -47,13 +59,15 @@ const MainNav = () => {
     };
   }, []);
 
-  // Check if current path is part of the about or contact sections
+  // Check if current path is part of the about, impact, or contact sections
   const isAboutSection = pathname === '/brief' ||
                         pathname === '/why' || 
                         pathname === '/board' || 
                         pathname === '/portfolio' || 
-                        pathname === '/team' ||
-                        pathname === '/map';
+                        pathname === '/team';
+  
+  const isImpactSection = pathname === '/outcomes' ||
+                         pathname === '/insights';
   
   const isContactSection = pathname === '/contact';
 
@@ -70,24 +84,36 @@ const MainNav = () => {
           <nav className="hidden md:flex items-center space-x-8">
             {navItems.map((item) => {
               if (item.subItems) {
+                const isAbout = item.label === 'About';
+                const isImpact = item.label === 'Impact';
+                const isOpen = isAbout ? isAboutOpen : isImpactOpen;
+                const isActive = isAbout ? isAboutSection : isImpactSection;
+                const dropdownRef = isAbout ? aboutDropdownRef : impactDropdownRef;
+                
                 return (
                   <div key={item.label} className="relative" ref={dropdownRef}>
                     <button
                       onClick={() => {
-                        setIsAboutOpen(!isAboutOpen);
+                        if (isAbout) {
+                          setIsAboutOpen(!isAboutOpen);
+                          setIsImpactOpen(false);
+                        } else if (isImpact) {
+                          setIsImpactOpen(!isImpactOpen);
+                          setIsAboutOpen(false);
+                        }
                       }}
                       className={`flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors duration-200 ${
-                        isAboutSection || isAboutOpen
+                        isActive || isOpen
                           ? 'text-black font-semibold' 
                           : 'text-black hover:text-gray-600'
                       }`}
                       aria-haspopup="true"
-                      aria-expanded={isAboutOpen}
+                      aria-expanded={isOpen}
                     >
                       {item.label}
                       <svg
                         className={`ml-1 w-4 h-4 transition-transform ${
-                          isAboutOpen ? 'transform rotate-180' : ''
+                          isOpen ? 'transform rotate-180' : ''
                         }`}
                         fill="none"
                         viewBox="0 0 24 24"
@@ -103,7 +129,7 @@ const MainNav = () => {
                     </button>
 
                     {/* Dropdown Menu */}
-                    {isAboutOpen && (
+                    {isOpen && (
                       <div className="absolute left-0 mt-2 w-56 rounded-md bg-white border border-black z-50">
                         <div className="py-1">
                           {item.subItems.map((subItem) => (
@@ -113,6 +139,7 @@ const MainNav = () => {
                               className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                               onClick={() => {
                                 setIsAboutOpen(false);
+                                setIsImpactOpen(false);
                               }}
                             >
                               {subItem.label}
